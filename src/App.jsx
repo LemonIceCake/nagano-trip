@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { 
   MapPin, Calendar, Coffee, Utensils, ShoppingBag, Car, Navigation, 
-  CloudSnow, CloudSun, Hotel, Phone, Trash2, AlertTriangle, Info, CreditCard, Wallet
+  CloudSnow, CloudSun, Hotel, Phone, Trash2, AlertTriangle, Info, CreditCard, Wallet,
+  ExternalLink, Search
 } from 'lucide-react';
 
 // --- 行程資料 ---
@@ -283,26 +284,73 @@ const ItineraryView = () => {
   );
 };
 
+// --- 更新後的資訊頁面 (含 App 連結) ---
 const InfoView = () => (
   <div className="pb-24 pt-6 px-4 max-w-md mx-auto space-y-6">
     <h2 className="text-2xl font-bold text-stone-800 px-1">旅程資訊</h2>
+    
+    {/* 住宿區塊 */}
     <div className="bg-white rounded-xl shadow-sm border border-stone-100 overflow-hidden">
       <div className="bg-stone-800 px-4 py-3 flex items-center text-white"><Hotel className="w-5 h-5 mr-2" /><h3 className="font-bold">住宿安排</h3></div>
       <div className="p-4 space-y-4">
-        <div className="border-b border-stone-100 pb-3"><div className="text-xs text-stone-400 mb-1">1/17</div><div className="font-bold">Hotel JAL City Nagano</div></div>
-        <div className="border-b border-stone-100 pb-3"><div className="text-xs text-stone-400 mb-1">1/18-20, 1/21-23</div><div className="font-bold">相鐵 Fresa Inn 長野東口</div></div>
-        <div className="border-b border-stone-100 pb-3"><div className="text-xs text-stone-400 mb-1">1/20</div><div className="font-bold">Hotel Nikko Niigata</div></div>
-        <div><div className="text-xs text-stone-400 mb-1">1/23</div><div className="font-bold">Daiwa Roynet Kyobashi</div></div>
+        <div className="border-b border-stone-100 pb-3">
+          <div className="text-xs text-stone-400 mb-1">1/17 (1晚)</div>
+          <div className="font-bold">Hotel JAL City Nagano</div>
+          <a href="https://www.agoda.com/zh-tw/search?text=Hotel%20JAL%20City%20Nagano" target="_blank" rel="noreferrer" className="mt-2 flex items-center text-indigo-600 text-sm font-medium hover:text-indigo-800">
+            <ExternalLink className="w-3 h-3 mr-1" />Agoda 查看/訂單
+          </a>
+        </div>
+        <div className="border-b border-stone-100 pb-3">
+          <div className="text-xs text-stone-400 mb-1">1/18-20, 1/21-23 (4晚)</div>
+          <div className="font-bold">相鐵 Fresa Inn 長野東口</div>
+          <a href="https://www.agoda.com/zh-tw/search?text=Sotetsu%20Fresa%20Inn%20Nagano-Higashiguchi" target="_blank" rel="noreferrer" className="mt-2 flex items-center text-indigo-600 text-sm font-medium hover:text-indigo-800">
+            <ExternalLink className="w-3 h-3 mr-1" />Agoda 查看/訂單
+          </a>
+        </div>
+        <div className="border-b border-stone-100 pb-3">
+          <div className="text-xs text-stone-400 mb-1">1/20 (1晚)</div>
+          <div className="font-bold">Hotel Nikko Niigata</div>
+           <a href="https://www.agoda.com/zh-tw/search?text=Hotel%20Nikko%20Niigata" target="_blank" rel="noreferrer" className="mt-2 flex items-center text-indigo-600 text-sm font-medium hover:text-indigo-800">
+            <ExternalLink className="w-3 h-3 mr-1" />Agoda 查看/訂單
+          </a>
+        </div>
+        <div>
+          <div className="text-xs text-stone-400 mb-1">1/23 (1晚)</div>
+          <div className="font-bold">Daiwa Roynet Kyobashi</div>
+          <a href="https://www.agoda.com/zh-tw/search?text=Daiwa%20Roynet%20Hotel%20Tokyo%20Kyobashi" target="_blank" rel="noreferrer" className="mt-2 flex items-center text-indigo-600 text-sm font-medium hover:text-indigo-800">
+            <ExternalLink className="w-3 h-3 mr-1" />Agoda 查看/訂單
+          </a>
+        </div>
       </div>
     </div>
+
+    {/* 租車區塊 */}
     <div className="bg-white rounded-xl shadow-sm border border-stone-100 overflow-hidden">
       <div className="bg-indigo-900 px-4 py-3 flex items-center text-white"><Car className="w-5 h-5 mr-2" /><h3 className="font-bold">租車資訊</h3></div>
-      <div className="p-4 text-sm text-stone-700 space-y-2">
-        <div className="flex justify-between"><span className="text-stone-500">取車</span><span className="font-medium">1/18 10:00 @ 長野站</span></div>
-        <div className="flex justify-between"><span className="text-stone-500">還車</span><span className="font-medium">1/23 上午 @ 長野站</span></div>
+      <div className="p-4 text-sm text-stone-700 space-y-4">
+        <div className="bg-indigo-50 p-3 rounded-lg border border-indigo-100">
+            <div className="flex justify-between items-center mb-2">
+                <span className="font-bold text-indigo-900">Nissan Rent-a-car</span>
+                <span className="bg-white text-indigo-800 text-xs px-2 py-1 rounded border border-indigo-200">長野站東口店</span>
+            </div>
+            <div className="flex gap-2">
+                <a href="https://www.google.com/maps/search/?api=1&query=Nissan+Rent-a-Car+Nagano+Station" target="_blank" rel="noreferrer" className="flex-1 bg-white border border-indigo-200 text-indigo-700 py-1.5 rounded flex items-center justify-center text-xs font-medium">
+                    <Navigation className="w-3 h-3 mr-1" />導航前往
+                </a>
+                <a href="https://www.klook.com/zh-TW/car-rentals/" target="_blank" rel="noreferrer" className="flex-1 bg-orange-500 text-white py-1.5 rounded flex items-center justify-center text-xs font-medium">
+                    <Search className="w-3 h-3 mr-1" />Klook 訂單
+                </a>
+            </div>
+        </div>
+        <div className="space-y-2 pt-2">
+            <div className="flex justify-between border-b border-stone-100 pb-2"><span className="text-stone-500">取車</span><span className="font-medium">1/18 10:00</span></div>
+            <div className="flex justify-between"><span className="text-stone-500">還車</span><span className="font-medium">1/23 上午</span></div>
+        </div>
         <div className="mt-3 bg-red-50 p-3 rounded text-red-800 text-xs leading-relaxed"><strong className="block mb-1">⚠️ 冬季駕駛注意：</strong>確認配備雪胎 (Snow Tires) 與 4WD。遇黑冰路段請勿急煞。</div>
       </div>
     </div>
+
+    {/* 緊急聯絡 */}
     <div className="bg-white rounded-xl shadow-sm border border-stone-100 overflow-hidden">
       <div className="bg-red-700 px-4 py-3 flex items-center text-white"><Phone className="w-5 h-5 mr-2" /><h3 className="font-bold">緊急聯絡</h3></div>
       <div className="p-4 grid grid-cols-2 gap-4">
@@ -393,3 +441,5 @@ const App = () => {
 };
 
 export default App;
+
+
