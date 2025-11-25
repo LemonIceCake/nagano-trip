@@ -4,16 +4,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>長野・雪國旅記</title>
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- iOS PWA 全螢幕設定 -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="長野旅記">
-    <link rel="apple-touch-icon" href="https://img.icons8.com/color/180/snow-storm.png">
+    
+    <!-- 🟢 Icon 設定：指向你上傳的 icon.png -->
+    <link rel="apple-touch-icon" href="./icon.png">
+    <link rel="icon" type="image/png" href="./icon.png">
   </head>
   <body class="bg-stone-50">
     <div id="root"></div>
-    <!-- 關鍵修改：前面加個點，確保它是相對路徑 -->
+    
+    <!-- 🟢 保持你剛剛測試成功的路徑 (./src/index.jsx) -->
     <script type="module" src="./src/index.jsx"></script>
   </body>
 </html>
-
