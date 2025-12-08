@@ -177,7 +177,7 @@ const itineraryData = [
     day: 7,
     date: "1/23 (五)",
     title: "東京美食巡禮",
-    location: "長野 ➔ 東京",
+    location: "長野 ➔ 東京 ➔ 成田",
     weather: { temp: "8°C", condition: "sunny" },
     activities: [
       {
@@ -193,6 +193,10 @@ const itineraryData = [
       {
         id: "7-3", time: "15:00", type: "shopping", title: "銀座散策", location: "Ginza Six",
         desc: "享受東京的繁華午後。",
+      },
+      {
+        id: "7-4", time: "19:00", type: "transport", title: "前往成田", location: "Narita Airport",
+        desc: "晚上移動至成田機場周邊住宿，準備明日搭機。",
       }
     ]
   },
@@ -200,13 +204,13 @@ const itineraryData = [
     day: 8,
     date: "1/24 (六)",
     title: "返程",
-    location: "東京 ➔ 機場",
+    location: "成田 ➔ 機場",
     weather: { temp: "9°C", condition: "cloudy" },
     activities: [
       {
         id: "8-1", time: "--:--", type: "transport", title: "前往機場",
-        desc: "搭乘 Narita Express 或利木津巴士前往機場。",
-        alert: "請預留 3 小時抵達機場"
+        desc: "搭乘飯店接駁車或步行前往成田機場。",
+        alert: "請預留 3 小時辦理登機"
       }
     ]
   }
@@ -289,36 +293,68 @@ const InfoView = () => (
   <div className="pb-24 pt-6 px-4 max-w-md mx-auto space-y-6">
     <h2 className="text-2xl font-bold text-stone-800 px-1">旅程資訊</h2>
     
-    {/* 住宿區塊 */}
+    {/* 住宿區塊 - 更新版 */}
     <div className="bg-white rounded-xl shadow-sm border border-stone-100 overflow-hidden">
       <div className="bg-stone-800 px-4 py-3 flex items-center text-white"><Hotel className="w-5 h-5 mr-2" /><h3 className="font-bold">住宿安排</h3></div>
       <div className="p-4 space-y-4">
+        
+        {/* 1/17 */}
         <div className="border-b border-stone-100 pb-3">
           <div className="text-xs text-stone-400 mb-1">1/17 (1晚)</div>
           <div className="font-bold">Hotel JAL City Nagano</div>
-          <a href="https://www.agoda.com/zh-tw/search?text=Hotel%20JAL%20City%20Nagano" target="_blank" rel="noreferrer" className="mt-2 flex items-center text-indigo-600 text-sm font-medium hover:text-indigo-800">
-            <ExternalLink className="w-3 h-3 mr-1" />Agoda 查看/訂單
+          <div className="flex items-center mt-1 mb-2">
+             <span className="text-xs bg-stone-100 text-stone-500 px-2 py-0.5 rounded mr-2">無早餐</span>
+          </div>
+          <a href="https://www.agoda.com/zh-tw/search?text=Hotel%20JAL%20City%20Nagano" target="_blank" rel="noreferrer" className="flex items-center text-indigo-600 text-sm font-medium hover:text-indigo-800">
+            <ExternalLink className="w-3 h-3 mr-1" />Agoda 查看
           </a>
         </div>
+
+        {/* 1/18-1/20 */}
         <div className="border-b border-stone-100 pb-3">
-          <div className="text-xs text-stone-400 mb-1">1/18-20, 1/21-23 (4晚)</div>
-          <div className="font-bold">相鐵 Fresa Inn 長野東口</div>
-          <a href="https://www.agoda.com/zh-tw/search?text=Sotetsu%20Fresa%20Inn%20Nagano-Higashiguchi" target="_blank" rel="noreferrer" className="mt-2 flex items-center text-indigo-600 text-sm font-medium hover:text-indigo-800">
-            <ExternalLink className="w-3 h-3 mr-1" />Agoda 查看/訂單
+          <div className="text-xs text-stone-400 mb-1">1/18-1/20 (2晚)</div>
+          <div className="font-bold">Sotetsu Fresa Inn Nagano-Zenkojiguchi</div>
+          <div className="flex items-center mt-1 mb-2">
+             <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded mr-2">含早餐</span>
+          </div>
+          <a href="https://www.agoda.com/zh-tw/search?text=Sotetsu%20Fresa%20Inn%20Nagano-Zenkojiguchi" target="_blank" rel="noreferrer" className="flex items-center text-indigo-600 text-sm font-medium hover:text-indigo-800">
+            <ExternalLink className="w-3 h-3 mr-1" />Agoda 查看
           </a>
         </div>
+
+        {/* 1/20-1/21 */}
         <div className="border-b border-stone-100 pb-3">
-          <div className="text-xs text-stone-400 mb-1">1/20 (1晚)</div>
+          <div className="text-xs text-stone-400 mb-1">1/20-1/21 (1晚)</div>
           <div className="font-bold">Hotel Nikko Niigata</div>
-           <a href="https://www.agoda.com/zh-tw/search?text=Hotel%20Nikko%20Niigata" target="_blank" rel="noreferrer" className="mt-2 flex items-center text-indigo-600 text-sm font-medium hover:text-indigo-800">
-            <ExternalLink className="w-3 h-3 mr-1" />Agoda 查看/訂單
+          <div className="flex items-center mt-1 mb-2">
+             <span className="text-xs bg-stone-100 text-stone-500 px-2 py-0.5 rounded mr-2">無早餐</span>
+          </div>
+           <a href="https://www.agoda.com/zh-tw/search?text=Hotel%20Nikko%20Niigata" target="_blank" rel="noreferrer" className="flex items-center text-indigo-600 text-sm font-medium hover:text-indigo-800">
+            <ExternalLink className="w-3 h-3 mr-1" />Agoda 查看
           </a>
         </div>
+        
+        {/* 1/21-1/23 */}
+        <div className="border-b border-stone-100 pb-3">
+          <div className="text-xs text-stone-400 mb-1">1/21-1/23 (2晚)</div>
+          <div className="font-bold">Sotetsu Fresa Inn Nagano-Zenkojiguchi</div>
+          <div className="flex items-center mt-1 mb-2">
+             <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded mr-2">含早餐</span>
+          </div>
+          <a href="https://www.agoda.com/zh-tw/search?text=Sotetsu%20Fresa%20Inn%20Nagano-Zenkojiguchi" target="_blank" rel="noreferrer" className="flex items-center text-indigo-600 text-sm font-medium hover:text-indigo-800">
+            <ExternalLink className="w-3 h-3 mr-1" />Agoda 查看
+          </a>
+        </div>
+
+        {/* 1/23-1/24 */}
         <div>
-          <div className="text-xs text-stone-400 mb-1">1/23 (1晚)</div>
-          <div className="font-bold">Daiwa Roynet Kyobashi</div>
-          <a href="https://www.agoda.com/zh-tw/search?text=Daiwa%20Roynet%20Hotel%20Tokyo%20Kyobashi" target="_blank" rel="noreferrer" className="mt-2 flex items-center text-indigo-600 text-sm font-medium hover:text-indigo-800">
-            <ExternalLink className="w-3 h-3 mr-1" />Agoda 查看/訂單
+          <div className="text-xs text-stone-400 mb-1">1/23-1/24 (1晚)</div>
+          <div className="font-bold">Toyoko Inn Narita Airport Shinkan</div>
+          <div className="flex items-center mt-1 mb-2">
+             <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded mr-2">含早餐</span>
+          </div>
+          <a href="https://www.agoda.com/zh-tw/search?text=Toyoko%20Inn%20Narita%20Airport%20Shinkan" target="_blank" rel="noreferrer" className="flex items-center text-indigo-600 text-sm font-medium hover:text-indigo-800">
+            <ExternalLink className="w-3 h-3 mr-1" />Agoda 查看
           </a>
         </div>
       </div>
