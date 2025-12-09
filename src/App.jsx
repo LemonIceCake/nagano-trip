@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  MapPin, Calendar, Coffee, Utensils, ShoppingBag, Car, Navigation, 
+  MapPin, Calendar, Utensils, ShoppingBag, Car, Navigation, 
   CloudSnow, CloudSun, Hotel, Phone, Trash2, AlertTriangle, Info, CreditCard, Wallet,
-  ExternalLink, Search
+  ExternalLink, Search, CheckSquare, ShieldCheck, FileWarning, Plus, X
 } from 'lucide-react';
 
-// --- 行程資料 ---
+// --- 1. 行程資料 ---
 const itineraryData = [
   {
     day: 1,
@@ -43,12 +43,12 @@ const itineraryData = [
     title: "神話與白雪",
     location: "長野 ➔ 戶隱 ➔ 白馬",
     weather: { temp: "-5°C", condition: "snow" },
-    alert: "今日取車！請檢查雪胎與 AWD。",
+    alert: "今日取車！請檢查 4WD 與雪胎。",
     activities: [
       {
-        id: "2-1", time: "10:00", type: "transport", title: "租車取車", location: "Nissan Rent-a-car Nagano Station",
-        desc: "確認雪胎、雨刷狀況，設定導航。",
-        highlight: "檢查：除雪刷是否在車上",
+        id: "2-1", time: "10:00", type: "transport", title: "租車取車", location: "Nippon Rent-a-car Nagano Station East Exit",
+        desc: "前往長野站東口店取車。務必確認 4WD。",
+        highlight: "檢查：加油蓋位置、除雪刷",
       },
       {
         id: "2-2", time: "11:30", type: "sightseeing", title: "戶隱神社 (中社)", location: "Togakushi Shrine Chusha",
@@ -216,7 +216,21 @@ const itineraryData = [
   }
 ];
 
-// --- 元件 ---
+// --- 2. 預設準備清單資料 ---
+const defaultPrepItems = [
+  { id: 'p1', text: '護照 (檢查效期)', checked: false, type: 'prep' },
+  { id: 'p2', text: '台灣駕照正本', checked: false, type: 'prep' },
+  { id: 'p3', text: '駕照日文譯本', checked: false, type: 'prep' },
+  { id: 'p4', text: '實體信用卡 (末碼3066)', checked: false, type: 'prep' },
+  { id: 'p5', text: 'VJW 入境審查填寫', checked: false, type: 'prep' },
+  { id: 'p6', text: '保暖：發熱衣褲/毛帽/手套', checked: false, type: 'prep' },
+  { id: 'p7', text: '墨鏡 (雪地防眩光)', checked: false, type: 'prep' },
+  { id: 'p8', text: '行動電源 & 充電線', checked: false, type: 'prep' },
+  { id: 'b1', text: 'The North Face 雪靴', checked: false, type: 'buy' },
+  { id: 'b2', text: 'Columbia 防水外套', checked: false, type: 'buy' },
+];
+
+// --- 3. 元件 ---
 
 const WeatherIcon = ({ condition }) => {
   if (condition === 'snow') return <CloudSnow className="w-5 h-5 text-indigo-400" />;
@@ -224,6 +238,7 @@ const WeatherIcon = ({ condition }) => {
   return <CloudSnow className="w-5 h-5 text-gray-400" />;
 };
 
+// --- 行程頁面 ---
 const ItineraryView = () => {
   const [activeDay, setActiveDay] = useState(1);
   useEffect(() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }, [activeDay]);
@@ -288,101 +303,114 @@ const ItineraryView = () => {
   );
 };
 
-// --- 更新後的資訊頁面 (含 App 連結) ---
+// --- 資訊頁面 (含詳細租車資訊) ---
 const InfoView = () => (
   <div className="pb-24 pt-6 px-4 max-w-md mx-auto space-y-6">
     <h2 className="text-2xl font-bold text-stone-800 px-1">旅程資訊</h2>
     
-    {/* 住宿區塊 - 更新版 */}
+    {/* 租車詳細資訊區塊 (新增重點) */}
     <div className="bg-white rounded-xl shadow-sm border border-stone-100 overflow-hidden">
-      <div className="bg-stone-800 px-4 py-3 flex items-center text-white"><Hotel className="w-5 h-5 mr-2" /><h3 className="font-bold">住宿安排</h3></div>
-      <div className="p-4 space-y-4">
-        
-        {/* 1/17 */}
-        <div className="border-b border-stone-100 pb-3">
-          <div className="text-xs text-stone-400 mb-1">1/17 (1晚)</div>
-          <div className="font-bold">Hotel JAL City Nagano</div>
-          <div className="flex items-center mt-1 mb-2">
-             <span className="text-xs bg-stone-100 text-stone-500 px-2 py-0.5 rounded mr-2">無早餐</span>
-          </div>
-          <a href="https://www.agoda.com/zh-tw/search?text=Hotel%20JAL%20City%20Nagano" target="_blank" rel="noreferrer" className="flex items-center text-indigo-600 text-sm font-medium hover:text-indigo-800">
-            <ExternalLink className="w-3 h-3 mr-1" />Agoda 查看
-          </a>
-        </div>
-
-        {/* 1/18-1/20 */}
-        <div className="border-b border-stone-100 pb-3">
-          <div className="text-xs text-stone-400 mb-1">1/18-1/20 (2晚)</div>
-          <div className="font-bold">Sotetsu Fresa Inn Nagano-Zenkojiguchi</div>
-          <div className="flex items-center mt-1 mb-2">
-             <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded mr-2">含早餐</span>
-          </div>
-          <a href="https://www.agoda.com/zh-tw/search?text=Sotetsu%20Fresa%20Inn%20Nagano-Zenkojiguchi" target="_blank" rel="noreferrer" className="flex items-center text-indigo-600 text-sm font-medium hover:text-indigo-800">
-            <ExternalLink className="w-3 h-3 mr-1" />Agoda 查看
-          </a>
-        </div>
-
-        {/* 1/20-1/21 */}
-        <div className="border-b border-stone-100 pb-3">
-          <div className="text-xs text-stone-400 mb-1">1/20-1/21 (1晚)</div>
-          <div className="font-bold">Hotel Nikko Niigata</div>
-          <div className="flex items-center mt-1 mb-2">
-             <span className="text-xs bg-stone-100 text-stone-500 px-2 py-0.5 rounded mr-2">無早餐</span>
-          </div>
-           <a href="https://www.agoda.com/zh-tw/search?text=Hotel%20Nikko%20Niigata" target="_blank" rel="noreferrer" className="flex items-center text-indigo-600 text-sm font-medium hover:text-indigo-800">
-            <ExternalLink className="w-3 h-3 mr-1" />Agoda 查看
-          </a>
-        </div>
-        
-        {/* 1/21-1/23 */}
-        <div className="border-b border-stone-100 pb-3">
-          <div className="text-xs text-stone-400 mb-1">1/21-1/23 (2晚)</div>
-          <div className="font-bold">Sotetsu Fresa Inn Nagano-Zenkojiguchi</div>
-          <div className="flex items-center mt-1 mb-2">
-             <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded mr-2">含早餐</span>
-          </div>
-          <a href="https://www.agoda.com/zh-tw/search?text=Sotetsu%20Fresa%20Inn%20Nagano-Zenkojiguchi" target="_blank" rel="noreferrer" className="flex items-center text-indigo-600 text-sm font-medium hover:text-indigo-800">
-            <ExternalLink className="w-3 h-3 mr-1" />Agoda 查看
-          </a>
-        </div>
-
-        {/* 1/23-1/24 */}
+      <div className="bg-indigo-900 px-4 py-3 flex items-center justify-between text-white">
+        <div className="flex items-center"><Car className="w-5 h-5 mr-2" /><h3 className="font-bold">Nippon 租車詳情</h3></div>
+        <span className="text-xs bg-indigo-700 px-2 py-0.5 rounded">S-S Class</span>
+      </div>
+      
+      <div className="p-4 space-y-5">
+        {/* 車輛規格 */}
         <div>
-          <div className="text-xs text-stone-400 mb-1">1/23-1/24 (1晚)</div>
-          <div className="font-bold">Toyoko Inn Narita Airport Shinkan</div>
-          <div className="flex items-center mt-1 mb-2">
-             <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded mr-2">含早餐</span>
+           <h4 className="text-sm font-bold text-stone-800 mb-2 flex items-center"><Info className="w-4 h-4 mr-1 text-indigo-600"/> 車輛規格</h4>
+           <ul className="text-sm text-stone-600 space-y-1 pl-1">
+             <li className="flex justify-between border-b border-stone-50 pb-1"><span>車型</span><span className="font-medium">Fit / Yaris (同級)</span></li>
+             <li className="flex justify-between border-b border-stone-50 pb-1"><span>驅動</span><span className="font-medium text-red-600 font-bold">4WD (需口頭確認)</span></li>
+             <li className="flex justify-between border-b border-stone-50 pb-1"><span>輪胎</span><span className="font-medium">無釘雪胎 (已含)</span></li>
+             <li className="flex justify-between"><span>禁煙</span><span className="font-medium">是</span></li>
+           </ul>
+        </div>
+
+        {/* 取還車 */}
+        <div className="bg-stone-50 p-3 rounded-lg border border-stone-100">
+          <div className="grid grid-cols-2 gap-4 text-sm">
+            <div>
+              <div className="text-xs text-stone-400 mb-0.5">取車</div>
+              <div className="font-bold text-indigo-900">1/18 10:00</div>
+              <div className="text-xs text-stone-500">長野站東口</div>
+            </div>
+            <div>
+              <div className="text-xs text-stone-400 mb-0.5">還車</div>
+              <div className="font-bold text-indigo-900">1/23 10:00</div>
+              <div className="text-xs text-stone-500">長野站東口</div>
+            </div>
           </div>
-          <a href="https://www.agoda.com/zh-tw/search?text=Toyoko%20Inn%20Narita%20Airport%20Shinkan" target="_blank" rel="noreferrer" className="flex items-center text-indigo-600 text-sm font-medium hover:text-indigo-800">
-            <ExternalLink className="w-3 h-3 mr-1" />Agoda 查看
+          <a href="https://maps.app.goo.gl/w1S6hE5v4z5j3iZ98" target="_blank" rel="noreferrer" className="mt-3 w-full bg-white border border-indigo-200 text-indigo-700 py-1.5 rounded flex items-center justify-center text-xs font-medium">
+             <Navigation className="w-3 h-3 mr-1" />導航至長野站東口店
           </a>
+        </div>
+
+        {/* 保險內容 */}
+        <div>
+           <h4 className="text-sm font-bold text-stone-800 mb-2 flex items-center"><ShieldCheck className="w-4 h-4 mr-1 text-green-600"/> 全套保險 (已含)</h4>
+           <div className="text-xs text-stone-600 bg-green-50 p-3 rounded border border-green-100 space-y-1">
+             <div className="flex items-center"><CheckSquare className="w-3 h-3 mr-2 text-green-600"/><span>免責補償 (CDW) - 免自負額</span></div>
+             <div className="flex items-center"><CheckSquare className="w-3 h-3 mr-2 text-green-600"/><span>ECO (NOC補償) - 免營業損失</span></div>
+             <div className="flex items-center"><CheckSquare className="w-3 h-3 mr-2 text-green-600"/><span>道路救援 (免費額度內)</span></div>
+           </div>
+        </div>
+
+        {/* 取車必備文件 */}
+        <div>
+           <h4 className="text-sm font-bold text-stone-800 mb-2 flex items-center"><FileWarning className="w-4 h-4 mr-1 text-orange-600"/> 取車必備文件</h4>
+           <ul className="text-xs text-stone-700 space-y-1 list-disc list-inside bg-orange-50 p-3 rounded border border-orange-100">
+             <li>台灣駕照 <span className="font-bold">正本</span></li>
+             <li>駕照 <span className="font-bold">日文譯本</span></li>
+             <li>護照</li>
+             <li><span className="font-bold text-red-600">實體信用卡 (末碼 3066)</span></li>
+           </ul>
+        </div>
+
+        {/* 注意事項 (紅區) */}
+        <div className="bg-red-50 p-3 rounded border border-red-100 text-xs text-red-800 space-y-2">
+           <strong className="block text-red-900 flex items-center"><AlertTriangle className="w-3 h-3 mr-1"/> 重要注意事項</strong>
+           <p>1. <span className="font-bold">滿油還車 & 保留收據</span>：還車時店員會檢查加油收據。</p>
+           <p>2. <span className="font-bold">遇事故必報警</span>：無論擦撞多小，一定要報警 (110) 才有保險理賠。</p>
+           <p>3. <span className="font-bold">嚴禁違停</span>：罰金高達 2.5 萬日圓且手續麻煩。</p>
         </div>
       </div>
     </div>
 
-    {/* 租車區塊 */}
+    {/* 住宿區塊 */}
     <div className="bg-white rounded-xl shadow-sm border border-stone-100 overflow-hidden">
-      <div className="bg-indigo-900 px-4 py-3 flex items-center text-white"><Car className="w-5 h-5 mr-2" /><h3 className="font-bold">租車資訊</h3></div>
-      <div className="p-4 text-sm text-stone-700 space-y-4">
-        <div className="bg-indigo-50 p-3 rounded-lg border border-indigo-100">
-            <div className="flex justify-between items-center mb-2">
-                <span className="font-bold text-indigo-900">Nissan Rent-a-car</span>
-                <span className="bg-white text-indigo-800 text-xs px-2 py-1 rounded border border-indigo-200">長野站東口店</span>
-            </div>
-            <div className="flex gap-2">
-                <a href="https://www.google.com/maps/search/?api=1&query=Nissan+Rent-a-Car+Nagano+Station" target="_blank" rel="noreferrer" className="flex-1 bg-white border border-indigo-200 text-indigo-700 py-1.5 rounded flex items-center justify-center text-xs font-medium">
-                    <Navigation className="w-3 h-3 mr-1" />導航前往
-                </a>
-                <a href="https://www.klook.com/zh-TW/car-rentals/" target="_blank" rel="noreferrer" className="flex-1 bg-orange-500 text-white py-1.5 rounded flex items-center justify-center text-xs font-medium">
-                    <Search className="w-3 h-3 mr-1" />Klook 訂單
-                </a>
-            </div>
+      <div className="bg-stone-800 px-4 py-3 flex items-center text-white"><Hotel className="w-5 h-5 mr-2" /><h3 className="font-bold">住宿安排</h3></div>
+      <div className="p-4 space-y-4">
+        <div className="border-b border-stone-100 pb-3">
+          <div className="text-xs text-stone-400 mb-1">1/17 (1晚)</div>
+          <div className="font-bold">Hotel JAL City Nagano</div>
+          <div className="flex items-center mt-1 mb-2"><span className="text-xs bg-stone-100 text-stone-500 px-2 py-0.5 rounded mr-2">無早餐</span></div>
+          <a href="https://www.agoda.com/zh-tw/search?text=Hotel%20JAL%20City%20Nagano" target="_blank" rel="noreferrer" className="flex items-center text-indigo-600 text-sm font-medium hover:text-indigo-800"><ExternalLink className="w-3 h-3 mr-1" />Agoda 查看</a>
         </div>
-        <div className="space-y-2 pt-2">
-            <div className="flex justify-between border-b border-stone-100 pb-2"><span className="text-stone-500">取車</span><span className="font-medium">1/18 10:00</span></div>
-            <div className="flex justify-between"><span className="text-stone-500">還車</span><span className="font-medium">1/23 上午</span></div>
+        <div className="border-b border-stone-100 pb-3">
+          <div className="text-xs text-stone-400 mb-1">1/18-1/20 (2晚)</div>
+          <div className="font-bold">Sotetsu Fresa Inn Nagano-Zenkojiguchi</div>
+          <div className="flex items-center mt-1 mb-2"><span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded mr-2">含早餐</span></div>
+          <a href="https://www.agoda.com/zh-tw/search?text=Sotetsu%20Fresa%20Inn%20Nagano-Zenkojiguchi" target="_blank" rel="noreferrer" className="flex items-center text-indigo-600 text-sm font-medium hover:text-indigo-800"><ExternalLink className="w-3 h-3 mr-1" />Agoda 查看</a>
         </div>
-        <div className="mt-3 bg-red-50 p-3 rounded text-red-800 text-xs leading-relaxed"><strong className="block mb-1">⚠️ 冬季駕駛注意：</strong>確認配備雪胎 (Snow Tires) 與 4WD。遇黑冰路段請勿急煞。</div>
+        <div className="border-b border-stone-100 pb-3">
+          <div className="text-xs text-stone-400 mb-1">1/20-1/21 (1晚)</div>
+          <div className="font-bold">Hotel Nikko Niigata</div>
+          <div className="flex items-center mt-1 mb-2"><span className="text-xs bg-stone-100 text-stone-500 px-2 py-0.5 rounded mr-2">無早餐</span></div>
+           <a href="https://www.agoda.com/zh-tw/search?text=Hotel%20Nikko%20Niigata" target="_blank" rel="noreferrer" className="flex items-center text-indigo-600 text-sm font-medium hover:text-indigo-800"><ExternalLink className="w-3 h-3 mr-1" />Agoda 查看</a>
+        </div>
+        <div className="border-b border-stone-100 pb-3">
+          <div className="text-xs text-stone-400 mb-1">1/21-1/23 (2晚)</div>
+          <div className="font-bold">Sotetsu Fresa Inn Nagano-Zenkojiguchi</div>
+          <div className="flex items-center mt-1 mb-2"><span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded mr-2">含早餐</span></div>
+          <a href="https://www.agoda.com/zh-tw/search?text=Sotetsu%20Fresa%20Inn%20Nagano-Zenkojiguchi" target="_blank" rel="noreferrer" className="flex items-center text-indigo-600 text-sm font-medium hover:text-indigo-800"><ExternalLink className="w-3 h-3 mr-1" />Agoda 查看</a>
+        </div>
+        <div>
+          <div className="text-xs text-stone-400 mb-1">1/23-1/24 (1晚)</div>
+          <div className="font-bold">Toyoko Inn Narita Airport Shinkan</div>
+          <div className="flex items-center mt-1 mb-2"><span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded mr-2">含早餐</span></div>
+          <a href="https://www.agoda.com/zh-tw/search?text=Toyoko%20Inn%20Narita%20Airport%20Shinkan" target="_blank" rel="noreferrer" className="flex items-center text-indigo-600 text-sm font-medium hover:text-indigo-800"><ExternalLink className="w-3 h-3 mr-1" />Agoda 查看</a>
+        </div>
       </div>
     </div>
 
@@ -397,6 +425,100 @@ const InfoView = () => (
   </div>
 );
 
+// --- 全新清單頁面 (Checklist) ---
+const ChecklistView = () => {
+  const [items, setItems] = useState([]);
+  const [newItemText, setNewItemText] = useState('');
+  const [activeType, setActiveType] = useState('prep'); // 'prep' or 'buy'
+
+  // Load
+  useEffect(() => {
+    const saved = localStorage.getItem('trip_checklist');
+    if (saved) {
+      setItems(JSON.parse(saved));
+    } else {
+      setItems(defaultPrepItems);
+    }
+  }, []);
+
+  // Save
+  useEffect(() => {
+    localStorage.setItem('trip_checklist', JSON.stringify(items));
+  }, [items]);
+
+  const toggleCheck = (id) => {
+    setItems(items.map(item => item.id === id ? { ...item, checked: !item.checked } : item));
+  };
+
+  const addItem = (e) => {
+    e.preventDefault();
+    if (!newItemText.trim()) return;
+    setItems([...items, { id: Date.now().toString(), text: newItemText, checked: false, type: activeType }]);
+    setNewItemText('');
+  };
+
+  const deleteItem = (id) => {
+    setItems(items.filter(item => item.id !== id));
+  };
+
+  const displayItems = items.filter(i => i.type === activeType);
+
+  return (
+    <div className="pb-24 pt-6 px-4 max-w-md mx-auto">
+      <h2 className="text-2xl font-bold text-stone-800 mb-6 px-1">準備與購物</h2>
+
+      {/* Tabs */}
+      <div className="flex bg-stone-200 p-1 rounded-xl mb-6">
+        <button 
+          onClick={() => setActiveType('prep')}
+          className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${activeType === 'prep' ? 'bg-white text-stone-800 shadow-sm' : 'text-stone-500'}`}
+        >
+          行前準備
+        </button>
+        <button 
+          onClick={() => setActiveType('buy')}
+          className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${activeType === 'buy' ? 'bg-white text-stone-800 shadow-sm' : 'text-stone-500'}`}
+        >
+          購物清單
+        </button>
+      </div>
+
+      {/* Input */}
+      <form onSubmit={addItem} className="flex gap-2 mb-6">
+        <input 
+          type="text" 
+          value={newItemText}
+          onChange={(e) => setNewItemText(e.target.value)}
+          placeholder={activeType === 'prep' ? "新增準備項目..." : "新增想買的東西..."}
+          className="flex-1 bg-white border border-stone-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-stone-400 shadow-sm"
+        />
+        <button type="submit" className="bg-stone-800 text-white w-12 rounded-xl flex items-center justify-center shadow-sm active:scale-95 transition-transform">
+          <Plus size={20} />
+        </button>
+      </form>
+
+      {/* List */}
+      <div className="space-y-3">
+        {displayItems.length === 0 && <div className="text-center text-stone-400 py-8 text-sm">清單是空的</div>}
+        {displayItems.map(item => (
+          <div key={item.id} className={`flex items-center justify-between p-4 rounded-xl border transition-all ${item.checked ? 'bg-stone-50 border-stone-100 opacity-60' : 'bg-white border-stone-100 shadow-sm'}`}>
+            <div className="flex items-center flex-1 cursor-pointer" onClick={() => toggleCheck(item.id)}>
+              <div className={`w-5 h-5 rounded border mr-3 flex items-center justify-center transition-colors ${item.checked ? 'bg-indigo-500 border-indigo-500' : 'border-stone-300'}`}>
+                {item.checked && <CheckSquare size={14} className="text-white" />}
+              </div>
+              <span className={`text-sm font-medium ${item.checked ? 'text-stone-400 line-through' : 'text-stone-700'}`}>{item.text}</span>
+            </div>
+            <button onClick={() => deleteItem(item.id)} className="text-stone-300 hover:text-red-400 p-2">
+              <X size={16} />
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// --- 記帳頁面 ---
 const BudgetView = () => {
   const [items, setItems] = useState([]);
   const [desc, setDesc] = useState('');
@@ -462,12 +584,14 @@ const App = () => {
       <main className="pt-14 min-h-screen">
         {activeTab === 'itinerary' && <ItineraryView />}
         {activeTab === 'info' && <InfoView />}
+        {activeTab === 'checklist' && <ChecklistView />}
         {activeTab === 'budget' && <BudgetView />}
       </main>
       <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-stone-200 pb-safe z-50 safe-area-pb">
         <div className="flex justify-around items-center h-16 max-w-md mx-auto">
           <button onClick={() => setActiveTab('itinerary')} className={`flex flex-col items-center justify-center w-full h-full space-y-1 ${activeTab === 'itinerary' ? 'text-stone-900' : 'text-stone-400'}`}><Calendar className="w-6 h-6" /><span className="text-[10px] font-medium">行程</span></button>
           <button onClick={() => setActiveTab('info')} className={`flex flex-col items-center justify-center w-full h-full space-y-1 ${activeTab === 'info' ? 'text-stone-900' : 'text-stone-400'}`}><Info className="w-6 h-6" /><span className="text-[10px] font-medium">資訊</span></button>
+          <button onClick={() => setActiveTab('checklist')} className={`flex flex-col items-center justify-center w-full h-full space-y-1 ${activeTab === 'checklist' ? 'text-stone-900' : 'text-stone-400'}`}><CheckSquare className="w-6 h-6" /><span className="text-[10px] font-medium">清單</span></button>
           <button onClick={() => setActiveTab('budget')} className={`flex flex-col items-center justify-center w-full h-full space-y-1 ${activeTab === 'budget' ? 'text-stone-900' : 'text-stone-400'}`}><CreditCard className="w-6 h-6" /><span className="text-[10px] font-medium">記帳</span></button>
         </div>
       </nav>
