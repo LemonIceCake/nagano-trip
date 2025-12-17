@@ -15,28 +15,33 @@ const itineraryData = [
     weather: { temp: "-2°C", condition: "cloudy" },
     activities: [
       {
-        id: "1-1", time: "06:30", type: "transport", title: "抵達東京成田",
-        desc: "樂桃 MM620 抵達。辦理入境、領取行李。",
-        tips: ["入境後記得先去上廁所、買水。"]
+        id: "1-1", time: "06:30", type: "transport", title: "抵達東京成田 (NRT)",
+        desc: "樂桃 MM620 抵達 T1 第一航廈。辦理入境、領取行李 (預計 1-1.5 小時)。",
+        tips: ["入境後記得先去上廁所、買水。", "若提早出關，可搭更早的 N'EX。"]
       },
       {
-        id: "1-2", time: "10:30", type: "transport", title: "前往東京站 & 移動",
-        desc: "搭乘 Narita Express 或巴士前往東京站，轉乘新幹線至輕井澤。",
-        tips: ["建議在機場或東京站先買點飯糰，新幹線上吃。"]
+        id: "1-2", time: "07:37", type: "transport", title: "N'EX 成田特快 2號",
+        desc: "07:37 成田機場 T1 發 ➔ 08:52 東京站著。",
+        tips: ["備案：若沒趕上，搭 08:12 的 N'EX 4號。", "全車指定席，建議先買票或用 JR Pass。"]
       },
       {
-        id: "1-3", time: "13:00", type: "shopping", title: "輕井澤 Prince Shopping Plaza",
+        id: "1-3", time: "09:32", type: "transport", title: "北陸新幹線 (Hakutaka 557)",
+        desc: "09:32 東京站發 ➔ 10:32 輕井澤著 (轉乘時間約 40 分鐘，夠買便當)。",
+        tips: ["東京站轉乘請找「新幹線北乘換口」。", "推薦買「駅弁 (Ekiben)」車上吃。"]
+      },
+      {
+        id: "1-4", time: "10:45", type: "shopping", title: "輕井澤 Prince Shopping Plaza",
         location: "Karuizawa Prince Shopping Plaza",
-        desc: "購買本次旅行最重要的裝備：防滑雪靴、雪衣。",
+        desc: "抵達輕井澤！先寄放行李（車站 Coin Locker 或王子飯店接駁車）。",
         highlight: "必買：The North Face, Columbia 雪靴",
-        tips: ["行李可寄放車站 Coin Locker。", "務必買防水防滑的鞋子，不然去戶隱會很慘。"]
+        tips: ["Outlet 很大，建議先看地圖鎖定戶外用品區。", "午餐可在 Outlet 美食街解決。"]
       },
       {
-        id: "1-4", time: "18:00", type: "transport", title: "前往長野市", location: "JR Nagano Station",
-        desc: "搭乘新幹線前往長野站 (約 30 分鐘)。",
+        id: "1-5", time: "16:00", type: "transport", title: "前往長野市", location: "JR Nagano Station",
+        desc: "搭乘新幹線前往長野站 (約 30 分鐘)。班次很多，隨到隨搭。",
       },
       {
-        id: "1-5", time: "19:00", type: "food", title: "長野站前晚餐", location: "Nagano Station Midori",
+        id: "1-6", time: "18:00", type: "food", title: "長野站前晚餐", location: "Nagano Station Midori",
         desc: "車站樓上 Midori 美食街或站前居酒屋。",
         highlight: "推薦：明治亭 醬汁豬排丼",
       }
@@ -214,7 +219,7 @@ const itineraryData = [
     activities: [
       {
         id: "8-1", time: "08:30", type: "transport", title: "捷星 GK13 起飛",
-        desc: "成田 T3 出發。請務必提前 3 小時抵達機場。",
+        desc: "成田 T3 第三航廈出發。請務必提前 3 小時抵達機場。",
         alert: "08:30 起飛 - 11:50 抵達"
       }
     ]
@@ -313,7 +318,7 @@ const InfoView = () => (
   <div className="pb-24 pt-6 px-4 max-w-md mx-auto space-y-6">
     <h2 className="text-2xl font-bold text-stone-800 px-1">旅程資訊</h2>
     
-    {/* ✈️ 航班資訊區塊 (更新版：含詳細行李資訊) */}
+    {/* ✈️ 航班資訊區塊 (更新版：含航廈資訊) */}
     <div className="bg-white rounded-xl shadow-sm border border-stone-100 overflow-hidden">
       <div className="bg-sky-700 px-4 py-3 flex items-center text-white">
         <Plane className="w-5 h-5 mr-2" />
@@ -336,7 +341,7 @@ const InfoView = () => (
            <div className="flex items-center justify-between bg-stone-50 p-3 rounded-lg border border-stone-100 mb-2">
              <div className="text-center">
                <div className="text-2xl font-bold text-stone-800">02:25</div>
-               <div className="text-xs text-stone-500">TPE 桃園</div>
+               <div className="text-xs text-stone-500 font-bold text-purple-700">TPE 桃園 T1</div>
              </div>
              <div className="flex-1 px-4 flex flex-col items-center">
                <div className="w-full h-px bg-stone-300 mb-1 relative">
@@ -346,7 +351,7 @@ const InfoView = () => (
              </div>
              <div className="text-center">
                <div className="text-2xl font-bold text-stone-800">06:30</div>
-               <div className="text-xs text-stone-500">NRT 成田</div>
+               <div className="text-xs text-stone-500 font-bold text-purple-700">NRT 成田 T1</div>
              </div>
            </div>
            <div className="grid grid-cols-2 gap-2 text-xs text-stone-600 mb-2">
@@ -380,7 +385,7 @@ const InfoView = () => (
            <div className="flex items-center justify-between bg-stone-50 p-3 rounded-lg border border-stone-100 mb-2">
              <div className="text-center">
                <div className="text-2xl font-bold text-stone-800">08:30</div>
-               <div className="text-xs text-stone-500">NRT 成田 T3</div>
+               <div className="text-xs text-stone-500 font-bold text-orange-600">NRT 成田 T3</div>
              </div>
              <div className="flex-1 px-4 flex flex-col items-center">
                <div className="w-full h-px bg-stone-300 mb-1 relative">
@@ -390,7 +395,7 @@ const InfoView = () => (
              </div>
              <div className="text-center">
                <div className="text-2xl font-bold text-stone-800">11:50</div>
-               <div className="text-xs text-stone-500">TPE 桃園 T1</div>
+               <div className="text-xs text-stone-500 font-bold text-orange-600">TPE 桃園 T1</div>
              </div>
            </div>
            <div className="grid grid-cols-2 gap-2 text-xs text-stone-600 mb-2">
