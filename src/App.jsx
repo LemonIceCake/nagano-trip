@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { 
   MapPin, Calendar, Utensils, ShoppingBag, Car, Navigation, 
   CloudSnow, CloudSun, Hotel, Phone, Trash2, AlertTriangle, Info, CreditCard, Wallet,
-  ExternalLink, Search, CheckSquare, ShieldCheck, FileWarning, Plus, X
+  ExternalLink, Search, CheckSquare, ShieldCheck, FileWarning, Plus, X, Plane, Ticket
 } from 'lucide-react';
 
 // --- 1. 行程資料 ---
@@ -15,23 +15,28 @@ const itineraryData = [
     weather: { temp: "-2°C", condition: "cloudy" },
     activities: [
       {
-        id: "1-1", time: "10:30", type: "transport", title: "抵達東京 & 移動",
-        desc: "成田/羽田機場前往東京站，轉乘新幹線至輕井澤。",
+        id: "1-1", time: "06:30", type: "transport", title: "抵達東京成田",
+        desc: "樂桃 MM620 抵達。辦理入境、領取行李。",
+        tips: ["入境後記得先去上廁所、買水。"]
+      },
+      {
+        id: "1-2", time: "10:30", type: "transport", title: "前往東京站 & 移動",
+        desc: "搭乘 Narita Express 或巴士前往東京站，轉乘新幹線至輕井澤。",
         tips: ["建議在機場或東京站先買點飯糰，新幹線上吃。"]
       },
       {
-        id: "1-2", time: "13:00", type: "shopping", title: "輕井澤 Prince Shopping Plaza",
+        id: "1-3", time: "13:00", type: "shopping", title: "輕井澤 Prince Shopping Plaza",
         location: "Karuizawa Prince Shopping Plaza",
         desc: "購買本次旅行最重要的裝備：防滑雪靴、雪衣。",
         highlight: "必買：The North Face, Columbia 雪靴",
         tips: ["行李可寄放車站 Coin Locker。", "務必買防水防滑的鞋子，不然去戶隱會很慘。"]
       },
       {
-        id: "1-3", time: "18:00", type: "transport", title: "前往長野市", location: "JR Nagano Station",
+        id: "1-4", time: "18:00", type: "transport", title: "前往長野市", location: "JR Nagano Station",
         desc: "搭乘新幹線前往長野站 (約 30 分鐘)。",
       },
       {
-        id: "1-4", time: "19:00", type: "food", title: "長野站前晚餐", location: "Nagano Station Midori",
+        id: "1-5", time: "19:00", type: "food", title: "長野站前晚餐", location: "Nagano Station Midori",
         desc: "車站樓上 Midori 美食街或站前居酒屋。",
         highlight: "推薦：明治亭 醬汁豬排丼",
       }
@@ -208,9 +213,9 @@ const itineraryData = [
     weather: { temp: "9°C", condition: "cloudy" },
     activities: [
       {
-        id: "8-1", time: "--:--", type: "transport", title: "前往機場",
-        desc: "搭乘飯店接駁車或步行前往成田機場。",
-        alert: "請預留 3 小時辦理登機"
+        id: "8-1", time: "08:30", type: "transport", title: "捷星 GK13 起飛",
+        desc: "成田 T3 出發。請務必提前 3 小時抵達機場。",
+        alert: "08:30 起飛 - 11:50 抵達"
       }
     ]
   }
@@ -308,7 +313,94 @@ const InfoView = () => (
   <div className="pb-24 pt-6 px-4 max-w-md mx-auto space-y-6">
     <h2 className="text-2xl font-bold text-stone-800 px-1">旅程資訊</h2>
     
-    {/* 租車詳細資訊區塊 (新增重點) */}
+    {/* ✈️ 航班資訊區塊 (新增) */}
+    <div className="bg-white rounded-xl shadow-sm border border-stone-100 overflow-hidden">
+      <div className="bg-sky-700 px-4 py-3 flex items-center text-white">
+        <Plane className="w-5 h-5 mr-2" />
+        <h3 className="font-bold">航班資訊</h3>
+      </div>
+      <div className="p-4 space-y-5">
+        <div className="text-xs text-stone-500 font-medium bg-stone-50 p-2 rounded border border-stone-100">
+           旅客：CHANG SHIHHAO, BAI TSANHU
+        </div>
+
+        {/* 去程 */}
+        <div className="relative">
+           <div className="flex justify-between items-center mb-2">
+             <div className="flex items-center">
+               <span className="bg-purple-100 text-purple-700 text-xs font-bold px-2 py-0.5 rounded mr-2">去程</span>
+               <span className="font-bold text-stone-800 text-sm">樂桃 MM620</span>
+             </div>
+             <span className="text-xs text-stone-400">1/17 (六)</span>
+           </div>
+           <div className="flex items-center justify-between bg-stone-50 p-3 rounded-lg border border-stone-100 mb-2">
+             <div className="text-center">
+               <div className="text-2xl font-bold text-stone-800">02:25</div>
+               <div className="text-xs text-stone-500">TPE 桃園</div>
+             </div>
+             <div className="flex-1 px-4 flex flex-col items-center">
+               <div className="w-full h-px bg-stone-300 mb-1 relative">
+                 <div className="absolute right-0 -top-1 w-2 h-2 border-t border-r border-stone-300 transform rotate-45"></div>
+               </div>
+               <span className="text-[10px] text-stone-400">3h 5m</span>
+             </div>
+             <div className="text-center">
+               <div className="text-2xl font-bold text-stone-800">06:30</div>
+               <div className="text-xs text-stone-500">NRT 成田</div>
+             </div>
+           </div>
+           <div className="grid grid-cols-2 gap-2 text-xs text-stone-600">
+             <div className="bg-stone-50 p-2 rounded border border-stone-100 flex items-center">
+               <Ticket className="w-3 h-3 mr-1 text-stone-400"/>
+               訂單：<span className="font-mono font-bold ml-1 text-stone-800">ESHHZ9</span>
+             </div>
+             <div className="bg-stone-50 p-2 rounded border border-stone-100">
+               座位：<span className="font-bold text-stone-800">4B, 4C</span>
+             </div>
+           </div>
+        </div>
+
+        {/* 分隔線 */}
+        <div className="border-t border-stone-100 border-dashed"></div>
+
+        {/* 回程 */}
+        <div>
+           <div className="flex justify-between items-center mb-2">
+             <div className="flex items-center">
+               <span className="bg-orange-100 text-orange-700 text-xs font-bold px-2 py-0.5 rounded mr-2">回程</span>
+               <span className="font-bold text-stone-800 text-sm">捷星 GK13</span>
+             </div>
+             <span className="text-xs text-stone-400">1/24 (六)</span>
+           </div>
+           <div className="flex items-center justify-between bg-stone-50 p-3 rounded-lg border border-stone-100 mb-2">
+             <div className="text-center">
+               <div className="text-2xl font-bold text-stone-800">08:30</div>
+               <div className="text-xs text-stone-500">NRT 成田 T3</div>
+             </div>
+             <div className="flex-1 px-4 flex flex-col items-center">
+               <div className="w-full h-px bg-stone-300 mb-1 relative">
+                 <div className="absolute right-0 -top-1 w-2 h-2 border-t border-r border-stone-300 transform rotate-45"></div>
+               </div>
+               <span className="text-[10px] text-stone-400">4h 20m</span>
+             </div>
+             <div className="text-center">
+               <div className="text-2xl font-bold text-stone-800">11:50</div>
+               <div className="text-xs text-stone-500">TPE 桃園 T1</div>
+             </div>
+           </div>
+           <div className="grid grid-cols-2 gap-2 text-xs text-stone-600">
+             <div className="bg-stone-50 p-2 rounded border border-stone-100">
+               託運：<span className="font-bold text-stone-800">30KG /人</span>
+             </div>
+             <div className="bg-stone-50 p-2 rounded border border-stone-100">
+               座位：<span className="font-bold text-stone-800">20E, 20F</span>
+             </div>
+           </div>
+        </div>
+      </div>
+    </div>
+    
+    {/* 租車詳細資訊區塊 */}
     <div className="bg-white rounded-xl shadow-sm border border-stone-100 overflow-hidden">
       <div className="bg-indigo-900 px-4 py-3 flex items-center justify-between text-white">
         <div className="flex items-center"><Car className="w-5 h-5 mr-2" /><h3 className="font-bold">Nippon 租車詳情</h3></div>
