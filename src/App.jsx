@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { 
   MapPin, Calendar, Utensils, ShoppingBag, Car, Navigation, 
   CloudSnow, CloudSun, Hotel, Phone, Trash2, AlertTriangle, Info, CreditCard, Wallet,
-  ExternalLink, Search, CheckSquare, ShieldCheck, FileWarning, Plus, X, Plane, Ticket
+  ExternalLink, Search, CheckSquare, ShieldCheck, FileWarning, Plus, X, Plane, Ticket, Luggage
 } from 'lucide-react';
 
 // --- 1. 行程資料 ---
@@ -308,12 +308,12 @@ const ItineraryView = () => {
   );
 };
 
-// --- 資訊頁面 (含詳細租車資訊) ---
+// --- 資訊頁面 (含詳細租車與航班資訊) ---
 const InfoView = () => (
   <div className="pb-24 pt-6 px-4 max-w-md mx-auto space-y-6">
     <h2 className="text-2xl font-bold text-stone-800 px-1">旅程資訊</h2>
     
-    {/* ✈️ 航班資訊區塊 (新增) */}
+    {/* ✈️ 航班資訊區塊 (更新版：含詳細行李資訊) */}
     <div className="bg-white rounded-xl shadow-sm border border-stone-100 overflow-hidden">
       <div className="bg-sky-700 px-4 py-3 flex items-center text-white">
         <Plane className="w-5 h-5 mr-2" />
@@ -349,7 +349,7 @@ const InfoView = () => (
                <div className="text-xs text-stone-500">NRT 成田</div>
              </div>
            </div>
-           <div className="grid grid-cols-2 gap-2 text-xs text-stone-600">
+           <div className="grid grid-cols-2 gap-2 text-xs text-stone-600 mb-2">
              <div className="bg-stone-50 p-2 rounded border border-stone-100 flex items-center">
                <Ticket className="w-3 h-3 mr-1 text-stone-400"/>
                訂單：<span className="font-mono font-bold ml-1 text-stone-800">ESHHZ9</span>
@@ -357,6 +357,11 @@ const InfoView = () => (
              <div className="bg-stone-50 p-2 rounded border border-stone-100">
                座位：<span className="font-bold text-stone-800">4B, 4C</span>
              </div>
+           </div>
+           {/* 行李資訊 (去程) */}
+           <div className="bg-purple-50 p-2 rounded border border-purple-100 text-xs text-purple-900 space-y-1">
+             <div className="flex items-center"><Luggage className="w-3 h-3 mr-1.5"/><strong>託運：</strong>1人 20kg + 1人 32kg</div>
+             <div className="flex items-center pl-4.5 text-purple-700">手提：7kg /人</div>
            </div>
         </div>
 
@@ -388,13 +393,15 @@ const InfoView = () => (
                <div className="text-xs text-stone-500">TPE 桃園 T1</div>
              </div>
            </div>
-           <div className="grid grid-cols-2 gap-2 text-xs text-stone-600">
-             <div className="bg-stone-50 p-2 rounded border border-stone-100">
-               託運：<span className="font-bold text-stone-800">30KG /人</span>
-             </div>
-             <div className="bg-stone-50 p-2 rounded border border-stone-100">
+           <div className="grid grid-cols-2 gap-2 text-xs text-stone-600 mb-2">
+             <div className="bg-stone-50 p-2 rounded border border-stone-100 col-span-2">
                座位：<span className="font-bold text-stone-800">20E, 20F</span>
              </div>
+           </div>
+           {/* 行李資訊 (回程) */}
+           <div className="bg-orange-50 p-2 rounded border border-orange-100 text-xs text-orange-900 space-y-1">
+             <div className="flex items-center"><Luggage className="w-3 h-3 mr-1.5"/><strong>託運：</strong>30kg /人 (共 60kg)</div>
+             <div className="flex items-center pl-4.5 text-orange-700">手提：7kg /人</div>
            </div>
         </div>
       </div>
