@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { 
   MapPin, Calendar, Utensils, ShoppingBag, Car, Navigation, 
   CloudSnow, CloudSun, Hotel, Phone, Trash2, AlertTriangle, Info, CreditCard, Wallet,
-  ExternalLink, Search, CheckSquare, ShieldCheck, FileWarning, Plus, X, Plane, Ticket, Luggage
+  ExternalLink, Search, CheckSquare, ShieldCheck, FileWarning, Plus, X, Plane, Ticket, Luggage, Train,
+  DollarSign, PieChart
 } from 'lucide-react';
 
 // --- 1. 行程資料 ---
@@ -226,7 +227,7 @@ const itineraryData = [
   }
 ];
 
-// --- 2. 預設準備清單資料 ---
+// --- 2. 預設資料 ---
 const defaultPrepItems = [
   { id: 'p1', text: '護照 (檢查效期)', checked: false, type: 'prep' },
   { id: 'p2', text: '台灣駕照正本', checked: false, type: 'prep' },
@@ -238,6 +239,17 @@ const defaultPrepItems = [
   { id: 'p8', text: '行動電源 & 充電線', checked: false, type: 'prep' },
   { id: 'b1', text: 'The North Face 雪靴', checked: false, type: 'buy' },
   { id: 'b2', text: 'Columbia 防水外套', checked: false, type: 'buy' },
+];
+
+const defaultFixedCosts = [
+  { id: 'fc1', title: '租車 (Nippon Rent-A-Car)', amount: 39160, note: 'S-S Class + CDW/ECO', paid: true },
+  { id: 'fc2', title: '去程機票 (Peach)', amount: 0, note: '請輸入金額', paid: true },
+  { id: 'fc3', title: '回程機票 (Jetstar)', amount: 0, note: '請輸入金額', paid: true },
+  { id: 'fc4', title: '住宿 (Hotel JAL City)', amount: 0, note: '1/17', paid: false },
+  { id: 'fc5', title: '住宿 (Sotetsu Fresa)', amount: 0, note: '長野 4晚', paid: false },
+  { id: 'fc6', title: '住宿 (Hotel Nikko)', amount: 0, note: '新潟 1晚', paid: false },
+  { id: 'fc7', title: '住宿 (Toyoko Inn)', amount: 0, note: '成田 1晚', paid: false },
+  { id: 'fc8', title: 'JR東京廣域周遊券', amount: 30000, note: '15000 x 2人', paid: false },
 ];
 
 // --- 3. 元件 ---
@@ -313,12 +325,12 @@ const ItineraryView = () => {
   );
 };
 
-// --- 資訊頁面 (含詳細租車與航班資訊) ---
+// --- 資訊頁面 ---
 const InfoView = () => (
   <div className="pb-24 pt-6 px-4 max-w-md mx-auto space-y-6">
     <h2 className="text-2xl font-bold text-stone-800 px-1">旅程資訊</h2>
     
-    {/* ✈️ 航班資訊區塊 (更新版：含航廈資訊) */}
+    {/* ✈️ 航班資訊 */}
     <div className="bg-white rounded-xl shadow-sm border border-stone-100 overflow-hidden">
       <div className="bg-sky-700 px-4 py-3 flex items-center text-white">
         <Plane className="w-5 h-5 mr-2" />
@@ -328,7 +340,6 @@ const InfoView = () => (
         <div className="text-xs text-stone-500 font-medium bg-stone-50 p-2 rounded border border-stone-100">
            旅客：CHANG SHIHHAO, BAI TSANHU
         </div>
-
         {/* 去程 */}
         <div className="relative">
            <div className="flex justify-between items-center mb-2">
@@ -363,16 +374,13 @@ const InfoView = () => (
                座位：<span className="font-bold text-stone-800">4B, 4C</span>
              </div>
            </div>
-           {/* 行李資訊 (去程) */}
            <div className="bg-purple-50 p-2 rounded border border-purple-100 text-xs text-purple-900 space-y-1">
              <div className="flex items-center"><Luggage className="w-3 h-3 mr-1.5"/><strong>託運：</strong>1人 20kg + 1人 32kg</div>
              <div className="flex items-center pl-4.5 text-purple-700">手提：7kg /人</div>
            </div>
         </div>
-
         {/* 分隔線 */}
         <div className="border-t border-stone-100 border-dashed"></div>
-
         {/* 回程 */}
         <div>
            <div className="flex justify-between items-center mb-2">
@@ -403,7 +411,6 @@ const InfoView = () => (
                座位：<span className="font-bold text-stone-800">20E, 20F</span>
              </div>
            </div>
-           {/* 行李資訊 (回程) */}
            <div className="bg-orange-50 p-2 rounded border border-orange-100 text-xs text-orange-900 space-y-1">
              <div className="flex items-center"><Luggage className="w-3 h-3 mr-1.5"/><strong>託運：</strong>30kg /人 (共 60kg)</div>
              <div className="flex items-center pl-4.5 text-orange-700">手提：7kg /人</div>
@@ -412,15 +419,13 @@ const InfoView = () => (
       </div>
     </div>
     
-    {/* 租車詳細資訊區塊 */}
+    {/* 租車詳細資訊 */}
     <div className="bg-white rounded-xl shadow-sm border border-stone-100 overflow-hidden">
       <div className="bg-indigo-900 px-4 py-3 flex items-center justify-between text-white">
         <div className="flex items-center"><Car className="w-5 h-5 mr-2" /><h3 className="font-bold">Nippon 租車詳情</h3></div>
         <span className="text-xs bg-indigo-700 px-2 py-0.5 rounded">S-S Class</span>
       </div>
-      
       <div className="p-4 space-y-5">
-        {/* 車輛規格 */}
         <div>
            <h4 className="text-sm font-bold text-stone-800 mb-2 flex items-center"><Info className="w-4 h-4 mr-1 text-indigo-600"/> 車輛規格</h4>
            <ul className="text-sm text-stone-600 space-y-1 pl-1">
@@ -430,8 +435,6 @@ const InfoView = () => (
              <li className="flex justify-between"><span>禁煙</span><span className="font-medium">是</span></li>
            </ul>
         </div>
-
-        {/* 取還車 */}
         <div className="bg-stone-50 p-3 rounded-lg border border-stone-100">
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div>
@@ -449,8 +452,6 @@ const InfoView = () => (
              <Navigation className="w-3 h-3 mr-1" />導航至長野站東口店
           </a>
         </div>
-
-        {/* 保險內容 */}
         <div>
            <h4 className="text-sm font-bold text-stone-800 mb-2 flex items-center"><ShieldCheck className="w-4 h-4 mr-1 text-green-600"/> 全套保險 (已含)</h4>
            <div className="text-xs text-stone-600 bg-green-50 p-3 rounded border border-green-100 space-y-1">
@@ -459,8 +460,6 @@ const InfoView = () => (
              <div className="flex items-center"><CheckSquare className="w-3 h-3 mr-2 text-green-600"/><span>道路救援 (免費額度內)</span></div>
            </div>
         </div>
-
-        {/* 取車必備文件 */}
         <div>
            <h4 className="text-sm font-bold text-stone-800 mb-2 flex items-center"><FileWarning className="w-4 h-4 mr-1 text-orange-600"/> 取車必備文件</h4>
            <ul className="text-xs text-stone-700 space-y-1 list-disc list-inside bg-orange-50 p-3 rounded border border-orange-100">
@@ -470,8 +469,6 @@ const InfoView = () => (
              <li><span className="font-bold text-red-600">實體信用卡 (末碼 3066)</span></li>
            </ul>
         </div>
-
-        {/* 注意事項 (紅區) */}
         <div className="bg-red-50 p-3 rounded border border-red-100 text-xs text-red-800 space-y-2">
            <strong className="block text-red-900 flex items-center"><AlertTriangle className="w-3 h-3 mr-1"/> 重要注意事項</strong>
            <p>1. <span className="font-bold">滿油還車 & 保留收據</span>：還車時店員會檢查加油收據。</p>
@@ -529,92 +526,48 @@ const InfoView = () => (
   </div>
 );
 
-// --- 全新清單頁面 (Checklist) ---
+// --- 清單頁面 ---
 const ChecklistView = () => {
   const [items, setItems] = useState([]);
   const [newItemText, setNewItemText] = useState('');
   const [activeType, setActiveType] = useState('prep'); // 'prep' or 'buy'
 
-  // Load
   useEffect(() => {
     const saved = localStorage.getItem('trip_checklist');
-    if (saved) {
-      setItems(JSON.parse(saved));
-    } else {
-      setItems(defaultPrepItems);
-    }
+    if (saved) { setItems(JSON.parse(saved)); } else { setItems(defaultPrepItems); }
   }, []);
 
-  // Save
-  useEffect(() => {
-    localStorage.setItem('trip_checklist', JSON.stringify(items));
-  }, [items]);
+  useEffect(() => { localStorage.setItem('trip_checklist', JSON.stringify(items)); }, [items]);
 
-  const toggleCheck = (id) => {
-    setItems(items.map(item => item.id === id ? { ...item, checked: !item.checked } : item));
-  };
-
+  const toggleCheck = (id) => { setItems(items.map(item => item.id === id ? { ...item, checked: !item.checked } : item)); };
   const addItem = (e) => {
-    e.preventDefault();
-    if (!newItemText.trim()) return;
+    e.preventDefault(); if (!newItemText.trim()) return;
     setItems([...items, { id: Date.now().toString(), text: newItemText, checked: false, type: activeType }]);
     setNewItemText('');
   };
-
-  const deleteItem = (id) => {
-    setItems(items.filter(item => item.id !== id));
-  };
-
+  const deleteItem = (id) => { setItems(items.filter(item => item.id !== id)); };
   const displayItems = items.filter(i => i.type === activeType);
 
   return (
     <div className="pb-24 pt-6 px-4 max-w-md mx-auto">
       <h2 className="text-2xl font-bold text-stone-800 mb-6 px-1">準備與購物</h2>
-
-      {/* Tabs */}
       <div className="flex bg-stone-200 p-1 rounded-xl mb-6">
-        <button 
-          onClick={() => setActiveType('prep')}
-          className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${activeType === 'prep' ? 'bg-white text-stone-800 shadow-sm' : 'text-stone-500'}`}
-        >
-          行前準備
-        </button>
-        <button 
-          onClick={() => setActiveType('buy')}
-          className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${activeType === 'buy' ? 'bg-white text-stone-800 shadow-sm' : 'text-stone-500'}`}
-        >
-          購物清單
-        </button>
+        <button onClick={() => setActiveType('prep')} className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${activeType === 'prep' ? 'bg-white text-stone-800 shadow-sm' : 'text-stone-500'}`}>行前準備</button>
+        <button onClick={() => setActiveType('buy')} className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${activeType === 'buy' ? 'bg-white text-stone-800 shadow-sm' : 'text-stone-500'}`}>購物清單</button>
       </div>
-
-      {/* Input */}
       <form onSubmit={addItem} className="flex gap-2 mb-6">
-        <input 
-          type="text" 
-          value={newItemText}
-          onChange={(e) => setNewItemText(e.target.value)}
-          placeholder={activeType === 'prep' ? "新增準備項目..." : "新增想買的東西..."}
-          className="flex-1 bg-white border border-stone-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-stone-400 shadow-sm"
-        />
-        <button type="submit" className="bg-stone-800 text-white w-12 rounded-xl flex items-center justify-center shadow-sm active:scale-95 transition-transform">
-          <Plus size={20} />
-        </button>
+        <input type="text" value={newItemText} onChange={(e) => setNewItemText(e.target.value)} placeholder={activeType === 'prep' ? "新增準備項目..." : "新增想買的東西..."} className="flex-1 bg-white border border-stone-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-stone-400 shadow-sm"/>
+        <button type="submit" className="bg-stone-800 text-white w-12 rounded-xl flex items-center justify-center shadow-sm active:scale-95 transition-transform"><Plus size={20} /></button>
       </form>
-
-      {/* List */}
       <div className="space-y-3">
         {displayItems.length === 0 && <div className="text-center text-stone-400 py-8 text-sm">清單是空的</div>}
         {displayItems.map(item => (
           <div key={item.id} className={`flex items-center justify-between p-4 rounded-xl border transition-all ${item.checked ? 'bg-stone-50 border-stone-100 opacity-60' : 'bg-white border-stone-100 shadow-sm'}`}>
             <div className="flex items-center flex-1 cursor-pointer" onClick={() => toggleCheck(item.id)}>
-              <div className={`w-5 h-5 rounded border mr-3 flex items-center justify-center transition-colors ${item.checked ? 'bg-indigo-500 border-indigo-500' : 'border-stone-300'}`}>
-                {item.checked && <CheckSquare size={14} className="text-white" />}
-              </div>
+              <div className={`w-5 h-5 rounded border mr-3 flex items-center justify-center transition-colors ${item.checked ? 'bg-indigo-500 border-indigo-500' : 'border-stone-300'}`}>{item.checked && <CheckSquare size={14} className="text-white" />}</div>
               <span className={`text-sm font-medium ${item.checked ? 'text-stone-400 line-through' : 'text-stone-700'}`}>{item.text}</span>
             </div>
-            <button onClick={() => deleteItem(item.id)} className="text-stone-300 hover:text-red-400 p-2">
-              <X size={16} />
-            </button>
+            <button onClick={() => deleteItem(item.id)} className="text-stone-300 hover:text-red-400 p-2"><X size={16} /></button>
           </div>
         ))}
       </div>
@@ -622,57 +575,145 @@ const ChecklistView = () => {
   );
 };
 
-// --- 記帳頁面 ---
+// --- 全新記帳頁面 (含固定支出) ---
 const BudgetView = () => {
-  const [items, setItems] = useState([]);
+  const [dailyItems, setDailyItems] = useState([]);
+  const [fixedItems, setFixedItems] = useState([]);
+  
+  // Daily Form
   const [desc, setDesc] = useState('');
   const [amount, setAmount] = useState('');
   const [category, setCategory] = useState('food');
 
-  useEffect(() => { const saved = localStorage.getItem('trip_budget'); if (saved) setItems(JSON.parse(saved)); }, []);
-  useEffect(() => { localStorage.setItem('trip_budget', JSON.stringify(items)); }, [items]);
+  // Load Data
+  useEffect(() => {
+    const savedDaily = localStorage.getItem('trip_budget');
+    if (savedDaily) setDailyItems(JSON.parse(savedDaily));
 
-  const handleAdd = (e) => {
+    const savedFixed = localStorage.getItem('trip_fixed_costs');
+    if (savedFixed) {
+      setFixedItems(JSON.parse(savedFixed));
+    } else {
+      setFixedItems(defaultFixedCosts);
+    }
+  }, []);
+
+  // Save Data
+  useEffect(() => { localStorage.setItem('trip_budget', JSON.stringify(dailyItems)); }, [dailyItems]);
+  useEffect(() => { localStorage.setItem('trip_fixed_costs', JSON.stringify(fixedItems)); }, [fixedItems]);
+
+  // Handlers - Daily
+  const addDailyItem = (e) => {
     e.preventDefault(); if (!desc || !amount) return;
-    setItems([{ id: Date.now(), desc, amount: parseInt(amount), category, date: new Date().toLocaleDateString() }, ...items]);
+    setDailyItems([{ id: Date.now(), desc, amount: parseInt(amount), category, date: new Date().toLocaleDateString() }, ...dailyItems]);
     setDesc(''); setAmount('');
   };
-  
-  const total = items.reduce((sum, item) => sum + item.amount, 0);
+  const deleteDailyItem = (id) => { setDailyItems(dailyItems.filter(i => i.id !== id)); };
+
+  // Handlers - Fixed
+  const updateFixedAmount = (id, newAmount) => {
+    setFixedItems(fixedItems.map(item => item.id === id ? { ...item, amount: parseInt(newAmount) || 0 } : item));
+  };
+  const toggleFixedPaid = (id) => {
+    setFixedItems(fixedItems.map(item => item.id === id ? { ...item, paid: !item.paid } : item));
+  };
+
+  // Calculations
+  const totalDaily = dailyItems.reduce((sum, item) => sum + item.amount, 0);
+  const totalFixed = fixedItems.reduce((sum, item) => sum + item.amount, 0);
+  const grandTotal = totalDaily + totalFixed;
 
   return (
     <div className="pb-24 pt-6 px-4 max-w-md mx-auto">
-      <h2 className="text-2xl font-bold text-stone-800 mb-6 px-1">旅費記帳</h2>
-      <div className="bg-gradient-to-br from-stone-800 to-stone-700 rounded-2xl p-6 text-white shadow-lg mb-8">
-        <div className="text-stone-300 text-sm mb-1">總支出 (JPY)</div>
-        <div className="text-4xl font-bold font-mono tracking-tight">{total.toLocaleString()}</div>
+      <h2 className="text-2xl font-bold text-stone-800 mb-4 px-1">旅費管理</h2>
+
+      {/* 總儀表板 */}
+      <div className="bg-stone-800 rounded-2xl p-5 text-white shadow-lg mb-6">
+        <div className="flex justify-between items-end mb-4">
+          <div>
+            <div className="text-stone-400 text-xs mb-1">總支出預估 (JPY)</div>
+            <div className="text-3xl font-bold font-mono tracking-tight">{grandTotal.toLocaleString()}</div>
+          </div>
+          <div className="text-right">
+             <div className="text-xs text-stone-400">日常: {totalDaily.toLocaleString()}</div>
+             <div className="text-xs text-stone-400">固定: {totalFixed.toLocaleString()}</div>
+          </div>
+        </div>
+        {/* 進度條 */}
+        <div className="w-full h-2 bg-stone-700 rounded-full overflow-hidden flex">
+          <div className="bg-indigo-500 h-full" style={{ width: `${grandTotal === 0 ? 0 : (totalFixed / grandTotal) * 100}%` }}></div>
+          <div className="bg-orange-500 h-full" style={{ width: `${grandTotal === 0 ? 0 : (totalDaily / grandTotal) * 100}%` }}></div>
+        </div>
+        <div className="flex justify-between mt-1 text-[10px] text-stone-500">
+          <span className="flex items-center"><div className="w-2 h-2 bg-indigo-500 rounded-full mr-1"></div>固定支出</span>
+          <span className="flex items-center"><div className="w-2 h-2 bg-orange-500 rounded-full mr-1"></div>日常花費</span>
+        </div>
       </div>
-      <form onSubmit={handleAdd} className="bg-white p-4 rounded-xl shadow-sm border border-stone-100 mb-8">
-        <div className="grid grid-cols-4 gap-2 mb-3">
-          {['food', 'transport', 'shopping', 'other'].map(cat => (
-            <button key={cat} type="button" onClick={() => setCategory(cat)} className={`p-2 rounded-lg flex justify-center ${category === cat ? 'bg-indigo-100 text-indigo-600' : 'bg-stone-50 text-stone-400'}`}>
-              {cat === 'food' && <Utensils size={20} />}{cat === 'transport' && <Car size={20} />}{cat === 'shopping' && <ShoppingBag size={20} />}{cat === 'other' && <Wallet size={20} />}
-            </button>
+
+      {/* 固定支出區塊 */}
+      <div className="mb-8">
+        <h3 className="text-lg font-bold text-stone-800 mb-3 flex items-center"><DollarSign className="w-5 h-5 mr-1 text-indigo-600"/> 固定大額支出</h3>
+        <div className="bg-white rounded-xl border border-stone-200 overflow-hidden shadow-sm">
+          {fixedItems.map(item => (
+            <div key={item.id} className="p-3 border-b border-stone-100 last:border-0 flex items-center justify-between">
+              <div className="flex-1">
+                <div className="text-sm font-bold text-stone-700">{item.title}</div>
+                <div className="text-xs text-stone-400">{item.note}</div>
+              </div>
+              <div className="flex items-center gap-3">
+                <input 
+                  type="number" 
+                  value={item.amount === 0 ? '' : item.amount} 
+                  placeholder="0"
+                  onChange={(e) => updateFixedAmount(item.id, e.target.value)}
+                  className="w-20 text-right bg-stone-50 border border-stone-200 rounded px-2 py-1 text-sm focus:border-indigo-500 outline-none font-mono"
+                />
+                <button 
+                  onClick={() => toggleFixedPaid(item.id)}
+                  className={`p-1.5 rounded-full border ${item.paid ? 'bg-green-100 text-green-600 border-green-200' : 'bg-stone-50 text-stone-300 border-stone-200'}`}
+                >
+                  <CheckSquare size={16} />
+                </button>
+              </div>
+            </div>
           ))}
         </div>
-        <div className="flex gap-2 mb-3">
-          <input type="text" placeholder="項目" className="flex-1 bg-stone-50 border border-stone-200 rounded-lg px-3 py-2 text-sm" value={desc} onChange={(e) => setDesc(e.target.value)} />
-          <input type="number" placeholder="金額" className="w-24 bg-stone-50 border border-stone-200 rounded-lg px-3 py-2 text-sm" value={amount} onChange={(e) => setAmount(e.target.value)} />
-        </div>
-        <button type="submit" className="w-full bg-stone-800 text-white py-2 rounded-lg text-sm font-bold">加入記帳</button>
-      </form>
-      <div className="space-y-3">
-        {items.map(item => (
-          <div key={item.id} className="flex justify-between items-center bg-white p-4 rounded-xl border border-stone-100 shadow-sm">
-            <div className="flex items-center">
-              <div className="w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center mr-3 text-stone-500">
-                {item.category === 'food' && <Utensils size={14} />}{item.category === 'transport' && <Car size={14} />}{item.category === 'shopping' && <ShoppingBag size={14} />}{item.category === 'other' && <Wallet size={14} />}
-              </div>
-              <div><div className="font-medium text-sm">{item.desc}</div><div className="text-stone-400 text-xs">{item.date}</div></div>
-            </div>
-            <div className="flex items-center"><span className="font-mono font-bold text-stone-700 mr-3">{item.amount.toLocaleString()}</span><button onClick={() => setItems(items.filter(i => i.id !== item.id))} className="text-stone-300 hover:text-red-400"><Trash2 size={16} /></button></div>
+        <div className="text-xs text-center text-stone-400 mt-2">勾選右側代表「已付款」</div>
+      </div>
+
+      {/* 日常記帳區塊 */}
+      <div>
+        <h3 className="text-lg font-bold text-stone-800 mb-3 flex items-center"><PieChart className="w-5 h-5 mr-1 text-orange-600"/> 日常隨手記</h3>
+        <form onSubmit={addDailyItem} className="bg-white p-3 rounded-xl shadow-sm border border-stone-200 mb-4">
+          <div className="grid grid-cols-4 gap-2 mb-3">
+            {['food', 'transport', 'shopping', 'other'].map(cat => (
+              <button key={cat} type="button" onClick={() => setCategory(cat)} className={`p-2 rounded-lg flex justify-center ${category === cat ? 'bg-orange-100 text-orange-600' : 'bg-stone-50 text-stone-400'}`}>
+                {cat === 'food' && <Utensils size={18} />}{cat === 'transport' && <Car size={18} />}{cat === 'shopping' && <ShoppingBag size={18} />}{cat === 'other' && <Wallet size={18} />}
+              </button>
+            ))}
           </div>
-        ))}
+          <div className="flex gap-2">
+            <input type="text" placeholder="項目 (例: 販賣機)" className="flex-1 bg-stone-50 border border-stone-200 rounded-lg px-3 py-2 text-sm outline-none" value={desc} onChange={(e) => setDesc(e.target.value)} />
+            <input type="number" placeholder="金額" className="w-20 bg-stone-50 border border-stone-200 rounded-lg px-3 py-2 text-sm outline-none" value={amount} onChange={(e) => setAmount(e.target.value)} />
+            <button type="submit" className="bg-stone-800 text-white px-3 rounded-lg"><Plus size={18} /></button>
+          </div>
+        </form>
+
+        <div className="space-y-2">
+          {dailyItems.length === 0 && <div className="text-center text-stone-400 py-4 text-xs">還沒有花費，開始記帳吧！</div>}
+          {dailyItems.map(item => (
+            <div key={item.id} className="flex justify-between items-center bg-white p-3 rounded-xl border border-stone-100 shadow-sm">
+              <div className="flex items-center">
+                <div className={`w-8 h-8 rounded-full bg-stone-50 flex items-center justify-center mr-3 
+                  ${item.category === 'food' ? 'text-orange-500' : item.category === 'transport' ? 'text-blue-500' : item.category === 'shopping' ? 'text-pink-500' : 'text-green-500'}`}>
+                  {item.category === 'food' && <Utensils size={14} />}{item.category === 'transport' && <Car size={14} />}{item.category === 'shopping' && <ShoppingBag size={14} />}{item.category === 'other' && <Wallet size={14} />}
+                </div>
+                <div><div className="font-medium text-sm text-stone-700">{item.desc}</div><div className="text-[10px] text-stone-400">{item.date}</div></div>
+              </div>
+              <div className="flex items-center"><span className="font-mono font-bold text-stone-700 mr-3">¥{item.amount.toLocaleString()}</span><button onClick={() => deleteDailyItem(item.id)} className="text-stone-300 hover:text-red-400"><Trash2 size={14} /></button></div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
