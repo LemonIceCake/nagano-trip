@@ -2,36 +2,36 @@ import React, { useState, useEffect } from 'react';
 import { 
   MapPin, Calendar, Utensils, ShoppingBag, Car, Navigation, 
   CloudSnow, CloudSun, Hotel, Phone, Trash2, AlertTriangle, Info, CreditCard, Wallet,
-  ExternalLink, Search, CheckSquare, ShieldCheck, FileWarning, Plus, X, Plane, Ticket, Luggage, Train,
-  DollarSign, PieChart
+  ExternalLink, Search, CheckSquare, ShieldCheck, FileWarning, Plus, X, Plane, Ticket, Luggage, Train
 } from 'lucide-react';
 
-// --- 1. 行程資料 ---
+// --- 1. 行程資料 (根據車票時間更新) ---
 const itineraryData = [
   {
     day: 1,
     date: "1/17 (六)",
-    title: "抵達與裝備",
-    location: "東京 ➔ 輕井澤 ➔ 長野",
+    title: "抵達與移動",
+    location: "成田 ➔ 東京 ➔ 輕井澤",
     weather: { temp: "-2°C", condition: "cloudy" },
     activities: [
       {
         id: "1-1", time: "06:30", type: "transport", title: "抵達東京成田 (NRT)",
-        desc: "樂桃 MM620 抵達 T1 第一航廈。辦理入境、領取行李 (預計 1-1.5 小時)。",
-        tips: ["入境後記得先去上廁所、買水。", "若提早出關，可搭更早的 N'EX。"]
+        desc: "樂桃 MM620 抵達 T1 第一航廈。辦理入境、領取行李。",
+        tips: ["入境後記得先去上廁所、買水。", "前往 B1 JR 車站改札口。"]
       },
       {
-        id: "1-2", time: "07:37", type: "transport", title: "N'EX 成田特快 2號",
-        desc: "07:37 成田機場 T1 發 ➔ 08:52 東京站著。",
-        tips: ["備案：若沒趕上，搭 08:12 的 N'EX 4號。", "全車指定席，建議先買票或用 JR Pass。"]
+        id: "1-2", time: "08:12", type: "transport", title: "N'EX 成田特快 4號",
+        desc: "成田 T1 發 (08:12) ➔ 東京站 著 (09:20)。",
+        highlight: "座位：7車 10A, 10B",
+        tips: ["使用「N'EX去回車票」進站。", "到東京站後，轉乘「北陸新幹線」。"]
       },
       {
-        id: "1-3", time: "09:32", type: "transport", title: "北陸新幹線 (Hakutaka 557)",
-        desc: "09:32 東京站發 ➔ 10:32 輕井澤著 (轉乘時間約 40 分鐘，夠買便當)。",
-        tips: ["東京站轉乘請找「新幹線北乘換口」。", "推薦買「駅弁 (Ekiben)」車上吃。"]
+        id: "1-3", time: "10:07", type: "transport", title: "新幹線 Hakutaka 559",
+        desc: "東京站 發 (10:07) ➔ 輕井澤 著 (11:11)。",
+        tips: ["轉乘時間約 45 分鐘，建議在東京站買「駅弁」車上吃。", "座位：請確認票面 (E48341)。"]
       },
       {
-        id: "1-4", time: "10:45", type: "shopping", title: "輕井澤 Prince Shopping Plaza",
+        id: "1-4", time: "11:30", type: "shopping", title: "輕井澤 Prince Shopping Plaza",
         location: "Karuizawa Prince Shopping Plaza",
         desc: "抵達輕井澤！先寄放行李（車站 Coin Locker 或王子飯店接駁車）。",
         highlight: "必買：The North Face, Columbia 雪靴",
@@ -39,7 +39,7 @@ const itineraryData = [
       },
       {
         id: "1-5", time: "16:00", type: "transport", title: "前往長野市", location: "JR Nagano Station",
-        desc: "搭乘新幹線前往長野站 (約 30 分鐘)。班次很多，隨到隨搭。",
+        desc: "搭乘新幹線前往長野站 (約 30 分鐘)。(尚未預訂)",
       },
       {
         id: "1-6", time: "18:00", type: "food", title: "長野站前晚餐", location: "Nagano Station Midori",
@@ -207,7 +207,7 @@ const itineraryData = [
       },
       {
         id: "7-4", time: "19:00", type: "transport", title: "前往成田", location: "Narita Airport",
-        desc: "晚上移動至成田機場周邊住宿，準備明日搭機。",
+        desc: "晚上移動至成田機場周邊住宿，準備明日搭機 (長野回東京、N'EX回程座位尚未預約)。",
       }
     ]
   },
@@ -241,6 +241,7 @@ const defaultPrepItems = [
   { id: 'b2', text: 'Columbia 防水外套', checked: false, type: 'buy' },
 ];
 
+// 更新固定支出 (加入實際車票金額)
 const defaultFixedCosts = [
   { id: 'fc1', title: '租車 (Nippon Rent-A-Car)', amount: 39160, note: 'S-S Class + CDW/ECO', paid: true },
   { id: 'fc2', title: '去程機票 (Peach)', amount: 0, note: '請輸入金額', paid: true },
@@ -249,7 +250,8 @@ const defaultFixedCosts = [
   { id: 'fc5', title: '住宿 (Sotetsu Fresa)', amount: 0, note: '長野 4晚', paid: false },
   { id: 'fc6', title: '住宿 (Hotel Nikko)', amount: 0, note: '新潟 1晚', paid: false },
   { id: 'fc7', title: '住宿 (Toyoko Inn)', amount: 0, note: '成田 1晚', paid: false },
-  { id: 'fc8', title: 'JR東京廣域周遊券', amount: 30000, note: '15000 x 2人', paid: false },
+  { id: 'fc8', title: 'N\'EX 東京去回車票', amount: 10000, note: '5000 x 2人 (周遊券)', paid: true },
+  { id: 'fc9', title: '新幹線 (東京-輕井澤)', amount: 22480, note: 'E48341 (2人)', paid: true },
 ];
 
 // --- 3. 元件 ---
@@ -325,11 +327,69 @@ const ItineraryView = () => {
   );
 };
 
-// --- 資訊頁面 ---
+// --- 資訊頁面 (新增車票夾) ---
 const InfoView = () => (
   <div className="pb-24 pt-6 px-4 max-w-md mx-auto space-y-6">
     <h2 className="text-2xl font-bold text-stone-800 px-1">旅程資訊</h2>
     
+    {/* 🚆 車票夾 (新增) */}
+    <div className="bg-white rounded-xl shadow-sm border border-stone-100 overflow-hidden">
+      <div className="bg-green-700 px-4 py-3 flex items-center text-white">
+        <Train className="w-5 h-5 mr-2" />
+        <h3 className="font-bold">JR 車票夾</h3>
+      </div>
+      <div className="p-4 space-y-4">
+        {/* 車票 1: N'EX 去回車票 */}
+        <div className="border border-stone-200 rounded-lg p-3 relative overflow-hidden">
+          <div className="absolute top-0 right-0 bg-red-500 text-white text-[10px] px-2 py-0.5 rounded-bl">已付款</div>
+          <div className="text-xs font-bold text-green-700 mb-1">票券 (主票)</div>
+          <div className="font-bold text-stone-800">N'EX 東京去回車票 (周遊券)</div>
+          <div className="mt-2 grid grid-cols-2 gap-2 text-xs text-stone-600">
+            <div>預約號碼：<span className="font-mono font-bold text-stone-800">E83249</span></div>
+            <div>啟用日：<span className="font-mono font-bold text-stone-800">01/17</span></div>
+            <div>金額：<span className="font-mono text-stone-800">¥10,000</span></div>
+            <div>期限：<span className="font-mono text-stone-800">14天</span></div>
+          </div>
+        </div>
+
+        {/* 車票 2: N'EX 指定席 */}
+        <div className="border border-stone-200 rounded-lg p-3 border-l-4 border-l-red-500">
+          <div className="text-xs font-bold text-red-600 mb-1">指定席 (去程)</div>
+          <div className="font-bold text-stone-800 mb-1">Narita-Express 4</div>
+          <div className="flex justify-between items-center text-sm mb-2">
+            <span className="font-mono">08:12 成田 T1</span>
+            <span className="text-stone-400">➔</span>
+            <span className="font-mono">09:20 東京</span>
+          </div>
+          <div className="bg-stone-50 p-2 rounded text-xs flex justify-between">
+            <span>7號車廂</span>
+            <span className="font-bold text-lg text-stone-800">10A, 10B</span>
+          </div>
+        </div>
+
+        {/* 車票 3: 新幹線 */}
+        <div className="border border-stone-200 rounded-lg p-3 border-l-4 border-l-green-600">
+          <div className="text-xs font-bold text-green-600 mb-1">新幹線 (東京-輕井澤)</div>
+          <div className="font-bold text-stone-800 mb-1">預約號碼：E48341</div>
+          <div className="flex justify-between items-center text-sm mb-2">
+            <span className="font-mono">10:07 東京</span>
+            <span className="text-stone-400">➔</span>
+            <span className="font-mono">11:11 輕井澤</span>
+          </div>
+          <div className="text-xs text-right text-stone-500">金額：¥22,480 (2人)</div>
+        </div>
+
+        {/* 待辦事項 */}
+        <div className="bg-yellow-50 p-3 rounded-lg border border-yellow-100 text-xs text-yellow-800">
+          <strong>⚠️ 尚未預約：</strong>
+          <ul className="list-disc list-inside mt-1 space-y-1">
+            <li>N'EX 回程指定席 (憑去回券劃位)</li>
+            <li>長野 ➔ 東京 回程車票</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
     {/* ✈️ 航班資訊 */}
     <div className="bg-white rounded-xl shadow-sm border border-stone-100 overflow-hidden">
       <div className="bg-sky-700 px-4 py-3 flex items-center text-white">
@@ -580,12 +640,10 @@ const BudgetView = () => {
   const [dailyItems, setDailyItems] = useState([]);
   const [fixedItems, setFixedItems] = useState([]);
   
-  // Daily Form
   const [desc, setDesc] = useState('');
   const [amount, setAmount] = useState('');
   const [category, setCategory] = useState('food');
 
-  // Load Data
   useEffect(() => {
     const savedDaily = localStorage.getItem('trip_budget');
     if (savedDaily) setDailyItems(JSON.parse(savedDaily));
@@ -598,11 +656,9 @@ const BudgetView = () => {
     }
   }, []);
 
-  // Save Data
   useEffect(() => { localStorage.setItem('trip_budget', JSON.stringify(dailyItems)); }, [dailyItems]);
   useEffect(() => { localStorage.setItem('trip_fixed_costs', JSON.stringify(fixedItems)); }, [fixedItems]);
 
-  // Handlers - Daily
   const addDailyItem = (e) => {
     e.preventDefault(); if (!desc || !amount) return;
     setDailyItems([{ id: Date.now(), desc, amount: parseInt(amount), category, date: new Date().toLocaleDateString() }, ...dailyItems]);
@@ -610,7 +666,6 @@ const BudgetView = () => {
   };
   const deleteDailyItem = (id) => { setDailyItems(dailyItems.filter(i => i.id !== id)); };
 
-  // Handlers - Fixed
   const updateFixedAmount = (id, newAmount) => {
     setFixedItems(fixedItems.map(item => item.id === id ? { ...item, amount: parseInt(newAmount) || 0 } : item));
   };
@@ -618,7 +673,6 @@ const BudgetView = () => {
     setFixedItems(fixedItems.map(item => item.id === id ? { ...item, paid: !item.paid } : item));
   };
 
-  // Calculations
   const totalDaily = dailyItems.reduce((sum, item) => sum + item.amount, 0);
   const totalFixed = fixedItems.reduce((sum, item) => sum + item.amount, 0);
   const grandTotal = totalDaily + totalFixed;
@@ -639,7 +693,6 @@ const BudgetView = () => {
              <div className="text-xs text-stone-400">固定: {totalFixed.toLocaleString()}</div>
           </div>
         </div>
-        {/* 進度條 */}
         <div className="w-full h-2 bg-stone-700 rounded-full overflow-hidden flex">
           <div className="bg-indigo-500 h-full" style={{ width: `${grandTotal === 0 ? 0 : (totalFixed / grandTotal) * 100}%` }}></div>
           <div className="bg-orange-500 h-full" style={{ width: `${grandTotal === 0 ? 0 : (totalDaily / grandTotal) * 100}%` }}></div>
@@ -661,19 +714,8 @@ const BudgetView = () => {
                 <div className="text-xs text-stone-400">{item.note}</div>
               </div>
               <div className="flex items-center gap-3">
-                <input 
-                  type="number" 
-                  value={item.amount === 0 ? '' : item.amount} 
-                  placeholder="0"
-                  onChange={(e) => updateFixedAmount(item.id, e.target.value)}
-                  className="w-20 text-right bg-stone-50 border border-stone-200 rounded px-2 py-1 text-sm focus:border-indigo-500 outline-none font-mono"
-                />
-                <button 
-                  onClick={() => toggleFixedPaid(item.id)}
-                  className={`p-1.5 rounded-full border ${item.paid ? 'bg-green-100 text-green-600 border-green-200' : 'bg-stone-50 text-stone-300 border-stone-200'}`}
-                >
-                  <CheckSquare size={16} />
-                </button>
+                <input type="number" value={item.amount === 0 ? '' : item.amount} placeholder="0" onChange={(e) => updateFixedAmount(item.id, e.target.value)} className="w-20 text-right bg-stone-50 border border-stone-200 rounded px-2 py-1 text-sm focus:border-indigo-500 outline-none font-mono"/>
+                <button onClick={() => toggleFixedPaid(item.id)} className={`p-1.5 rounded-full border ${item.paid ? 'bg-green-100 text-green-600 border-green-200' : 'bg-stone-50 text-stone-300 border-stone-200'}`}><CheckSquare size={16} /></button>
               </div>
             </div>
           ))}
@@ -698,14 +740,12 @@ const BudgetView = () => {
             <button type="submit" className="bg-stone-800 text-white px-3 rounded-lg"><Plus size={18} /></button>
           </div>
         </form>
-
         <div className="space-y-2">
           {dailyItems.length === 0 && <div className="text-center text-stone-400 py-4 text-xs">還沒有花費，開始記帳吧！</div>}
           {dailyItems.map(item => (
             <div key={item.id} className="flex justify-between items-center bg-white p-3 rounded-xl border border-stone-100 shadow-sm">
               <div className="flex items-center">
-                <div className={`w-8 h-8 rounded-full bg-stone-50 flex items-center justify-center mr-3 
-                  ${item.category === 'food' ? 'text-orange-500' : item.category === 'transport' ? 'text-blue-500' : item.category === 'shopping' ? 'text-pink-500' : 'text-green-500'}`}>
+                <div className={`w-8 h-8 rounded-full bg-stone-50 flex items-center justify-center mr-3 ${item.category === 'food' ? 'text-orange-500' : item.category === 'transport' ? 'text-blue-500' : item.category === 'shopping' ? 'text-pink-500' : 'text-green-500'}`}>
                   {item.category === 'food' && <Utensils size={14} />}{item.category === 'transport' && <Car size={14} />}{item.category === 'shopping' && <ShoppingBag size={14} />}{item.category === 'other' && <Wallet size={14} />}
                 </div>
                 <div><div className="font-medium text-sm text-stone-700">{item.desc}</div><div className="text-[10px] text-stone-400">{item.date}</div></div>
@@ -746,5 +786,3 @@ const App = () => {
 };
 
 export default App;
-
-
