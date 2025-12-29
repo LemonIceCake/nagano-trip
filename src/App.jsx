@@ -3,18 +3,23 @@ import {
   MapPin, Calendar, Utensils, ShoppingBag, Car, Navigation, 
   CloudSnow, CloudSun, Hotel, Phone, Trash2, AlertTriangle, Info, CreditCard, Wallet,
   ExternalLink, Search, CheckSquare, ShieldCheck, FileWarning, Plus, X, Plane, Ticket, Luggage, Train,
-  DollarSign, PieChart
+  DollarSign, PieChart, Bus
 } from 'lucide-react';
 
-// --- 1. 行程資料 (根據車票時間更新) ---
+// --- 1. 行程資料 (更新 Day 1 & Day 8 接送資訊) ---
 const itineraryData = [
   {
     day: 1,
-    date: "1/17 (六)",
-    title: "抵達與移動",
-    location: "成田 ➔ 東京 ➔ 輕井澤",
+    date: "1/16 (五) ~ 1/17 (六)",
+    title: "出發與移動",
+    location: "台灣 ➔ 東京 ➔ 輕井澤",
     weather: { temp: "-2°C", condition: "cloudy" },
     activities: [
+      {
+        id: "1-0", time: "22:40", type: "transport", title: "格上機場接送 (去程)",
+        desc: "2026/01/16 (週五) 晚上出發前往桃園機場。",
+        tips: ["駕駛資訊將於前一天 18:00~20:00 通知。", "記得帶護照！"]
+      },
       {
         id: "1-1", time: "06:30", type: "transport", title: "抵達東京成田 (NRT)",
         desc: "樂桃 MM620 抵達 T1 第一航廈。辦理入境、領取行李。",
@@ -216,13 +221,18 @@ const itineraryData = [
     day: 8,
     date: "1/24 (六)",
     title: "返程",
-    location: "成田 ➔ 機場",
+    location: "成田 ➔ 機場 ➔ 台灣",
     weather: { temp: "9°C", condition: "cloudy" },
     activities: [
       {
         id: "8-1", time: "08:30", type: "transport", title: "捷星 GK13 起飛",
         desc: "成田 T3 第三航廈出發。請務必提前 3 小時抵達機場。",
         alert: "08:30 起飛 - 11:50 抵達"
+      },
+      {
+        id: "8-2", time: "11:50", type: "transport", title: "格上機場接送 (回程)",
+        desc: "11:50 抵達桃園 T1。領完行李後，尋找接送司機。",
+        tips: ["駕駛資訊將於接送前 6 小時提供。", "若找不到司機，請加入 @airgo 聯繫。"]
       }
     ]
   }
@@ -328,12 +338,56 @@ const ItineraryView = () => {
   );
 };
 
-// --- 資訊頁面 (新增車票夾) ---
+// --- 資訊頁面 (新增機場接送區塊) ---
 const InfoView = () => (
   <div className="pb-24 pt-6 px-4 max-w-md mx-auto space-y-6">
     <h2 className="text-2xl font-bold text-stone-800 px-1">旅程資訊</h2>
     
-    {/* 🚆 車票夾 (新增) */}
+    {/* 🚗 機場接送 (新增) */}
+    <div className="bg-white rounded-xl shadow-sm border border-stone-100 overflow-hidden">
+      <div className="bg-blue-900 px-4 py-3 flex items-center text-white">
+        <Bus className="w-5 h-5 mr-2" />
+        <h3 className="font-bold">格上機場接送</h3>
+      </div>
+      <div className="p-4 space-y-4">
+        <div className="text-xs text-stone-500 font-medium bg-stone-50 p-2 rounded border border-stone-100 flex justify-between items-center">
+           <span>乘客：張世豪</span>
+           <a href="https://s.car-plus.com.tw/s/hQNV" target="_blank" rel="noreferrer" className="text-blue-600 underline">訂單查詢</a>
+        </div>
+
+        {/* 去程接送 */}
+        <div className="border border-stone-200 rounded-lg p-3 relative bg-blue-50/50">
+          <div className="flex justify-between items-center mb-2">
+            <span className="bg-blue-100 text-blue-700 text-xs font-bold px-2 py-0.5 rounded">去程</span>
+            <span className="text-xs text-stone-500 font-mono">202512022087</span>
+          </div>
+          <div className="text-sm font-bold text-stone-800 mb-1">1/16 (五) 22:40</div>
+          <div className="text-xs text-stone-600 mb-2">航班：MM620</div>
+          <div className="bg-white p-2 rounded border border-stone-100 text-[10px] text-stone-500">
+            ⚠️ 駕駛資訊：用車「前一天」18:00~20:00 提供
+          </div>
+        </div>
+
+        {/* 回程接送 */}
+        <div className="border border-stone-200 rounded-lg p-3 relative bg-orange-50/50">
+          <div className="flex justify-between items-center mb-2">
+            <span className="bg-orange-100 text-orange-700 text-xs font-bold px-2 py-0.5 rounded">回程</span>
+            <span className="text-xs text-stone-500 font-mono">202512022096</span>
+          </div>
+          <div className="text-sm font-bold text-stone-800 mb-1">1/24 (六) 11:50</div>
+          <div className="text-xs text-stone-600 mb-2">航班：GK13 (接機)</div>
+          <div className="bg-white p-2 rounded border border-stone-100 text-[10px] text-stone-500">
+            ⚠️ 駕駛資訊：接送時間「前 6 小時」提供
+          </div>
+        </div>
+
+        <div className="text-center text-xs text-stone-400">
+          LINE 官方帳號：<span className="font-bold text-green-600">@airgo</span>
+        </div>
+      </div>
+    </div>
+
+    {/* 🚆 車票夾 */}
     <div className="bg-white rounded-xl shadow-sm border border-stone-100 overflow-hidden">
       <div className="bg-green-700 px-4 py-3 flex items-center text-white">
         <Train className="w-5 h-5 mr-2" />
@@ -587,48 +641,92 @@ const InfoView = () => (
   </div>
 );
 
-// --- 清單頁面 ---
+// --- 全新清單頁面 (Checklist) ---
 const ChecklistView = () => {
   const [items, setItems] = useState([]);
   const [newItemText, setNewItemText] = useState('');
   const [activeType, setActiveType] = useState('prep'); // 'prep' or 'buy'
 
+  // Load
   useEffect(() => {
     const saved = localStorage.getItem('trip_checklist');
-    if (saved) { setItems(JSON.parse(saved)); } else { setItems(defaultPrepItems); }
+    if (saved) {
+      setItems(JSON.parse(saved));
+    } else {
+      setItems(defaultPrepItems);
+    }
   }, []);
 
-  useEffect(() => { localStorage.setItem('trip_checklist', JSON.stringify(items)); }, [items]);
+  // Save
+  useEffect(() => {
+    localStorage.setItem('trip_checklist', JSON.stringify(items));
+  }, [items]);
 
-  const toggleCheck = (id) => { setItems(items.map(item => item.id === id ? { ...item, checked: !item.checked } : item)); };
+  const toggleCheck = (id) => {
+    setItems(items.map(item => item.id === id ? { ...item, checked: !item.checked } : item));
+  };
+
   const addItem = (e) => {
-    e.preventDefault(); if (!newItemText.trim()) return;
+    e.preventDefault();
+    if (!newItemText.trim()) return;
     setItems([...items, { id: Date.now().toString(), text: newItemText, checked: false, type: activeType }]);
     setNewItemText('');
   };
-  const deleteItem = (id) => { setItems(items.filter(item => item.id !== id)); };
+
+  const deleteItem = (id) => {
+    setItems(items.filter(item => item.id !== id));
+  };
+
   const displayItems = items.filter(i => i.type === activeType);
 
   return (
     <div className="pb-24 pt-6 px-4 max-w-md mx-auto">
       <h2 className="text-2xl font-bold text-stone-800 mb-6 px-1">準備與購物</h2>
+
+      {/* Tabs */}
       <div className="flex bg-stone-200 p-1 rounded-xl mb-6">
-        <button onClick={() => setActiveType('prep')} className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${activeType === 'prep' ? 'bg-white text-stone-800 shadow-sm' : 'text-stone-500'}`}>行前準備</button>
-        <button onClick={() => setActiveType('buy')} className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${activeType === 'buy' ? 'bg-white text-stone-800 shadow-sm' : 'text-stone-500'}`}>購物清單</button>
+        <button 
+          onClick={() => setActiveType('prep')}
+          className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${activeType === 'prep' ? 'bg-white text-stone-800 shadow-sm' : 'text-stone-500'}`}
+        >
+          行前準備
+        </button>
+        <button 
+          onClick={() => setActiveType('buy')}
+          className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${activeType === 'buy' ? 'bg-white text-stone-800 shadow-sm' : 'text-stone-500'}`}
+        >
+          購物清單
+        </button>
       </div>
+
+      {/* Input */}
       <form onSubmit={addItem} className="flex gap-2 mb-6">
-        <input type="text" value={newItemText} onChange={(e) => setNewItemText(e.target.value)} placeholder={activeType === 'prep' ? "新增準備項目..." : "新增想買的東西..."} className="flex-1 bg-white border border-stone-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-stone-400 shadow-sm"/>
-        <button type="submit" className="bg-stone-800 text-white w-12 rounded-xl flex items-center justify-center shadow-sm active:scale-95 transition-transform"><Plus size={20} /></button>
+        <input 
+          type="text" 
+          value={newItemText}
+          onChange={(e) => setNewItemText(e.target.value)}
+          placeholder={activeType === 'prep' ? "新增準備項目..." : "新增想買的東西..."}
+          className="flex-1 bg-white border border-stone-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-stone-400 shadow-sm"
+        />
+        <button type="submit" className="bg-stone-800 text-white w-12 rounded-xl flex items-center justify-center shadow-sm active:scale-95 transition-transform">
+          <Plus size={20} />
+        </button>
       </form>
+
+      {/* List */}
       <div className="space-y-3">
         {displayItems.length === 0 && <div className="text-center text-stone-400 py-8 text-sm">清單是空的</div>}
         {displayItems.map(item => (
           <div key={item.id} className={`flex items-center justify-between p-4 rounded-xl border transition-all ${item.checked ? 'bg-stone-50 border-stone-100 opacity-60' : 'bg-white border-stone-100 shadow-sm'}`}>
             <div className="flex items-center flex-1 cursor-pointer" onClick={() => toggleCheck(item.id)}>
-              <div className={`w-5 h-5 rounded border mr-3 flex items-center justify-center transition-colors ${item.checked ? 'bg-indigo-500 border-indigo-500' : 'border-stone-300'}`}>{item.checked && <CheckSquare size={14} className="text-white" />}</div>
+              <div className={`w-5 h-5 rounded border mr-3 flex items-center justify-center transition-colors ${item.checked ? 'bg-indigo-500 border-indigo-500' : 'border-stone-300'}`}>
+                {item.checked && <CheckSquare size={14} className="text-white" />}
+              </div>
               <span className={`text-sm font-medium ${item.checked ? 'text-stone-400 line-through' : 'text-stone-700'}`}>{item.text}</span>
             </div>
-            <button onClick={() => deleteItem(item.id)} className="text-stone-300 hover:text-red-400 p-2"><X size={16} /></button>
+            <button onClick={() => deleteItem(item.id)} className="text-stone-300 hover:text-red-400 p-2">
+              <X size={16} />
+            </button>
           </div>
         ))}
       </div>
@@ -787,3 +885,5 @@ const App = () => {
 };
 
 export default App;
+
+
