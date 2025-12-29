@@ -6,7 +6,7 @@ import {
   DollarSign, PieChart, Bus
 } from 'lucide-react';
 
-// --- 1. 行程資料 (更新 Day 1 & Day 8 接送資訊) ---
+// --- 1. 行程資料 (更新 Day 1 列車資訊) ---
 const itineraryData = [
   {
     day: 1,
@@ -32,9 +32,9 @@ const itineraryData = [
         tips: ["使用「N'EX去回車票」進站。", "到東京站後，轉乘「北陸新幹線」。"]
       },
       {
-        id: "1-3", time: "10:07", type: "transport", title: "新幹線 Hakutaka 559",
+        id: "1-3", time: "10:07", type: "transport", title: "新幹線 Asama 635 (GranClass)",
         desc: "東京站 發 (10:07) ➔ 輕井澤 著 (11:11)。",
-        tips: ["轉乘時間約 45 分鐘，建議在東京站買「駅弁」車上吃。", "座位：請確認票面 (E48341)。"]
+        tips: ["⚠️ 使用 IC 卡進站 (請確認已綁定)", "座位：12車 6B, 6C (超高檔車廂)。"]
       },
       {
         id: "1-4", time: "11:30", type: "shopping", title: "輕井澤 Prince Shopping Plaza",
@@ -262,7 +262,7 @@ const defaultFixedCosts = [
   { id: 'fc6', title: '住宿 (Hotel Nikko)', amount: 0, note: '新潟 1晚', paid: false },
   { id: 'fc7', title: '住宿 (Toyoko Inn)', amount: 0, note: '成田 1晚', paid: false },
   { id: 'fc8', title: 'N\'EX 東京去回車票', amount: 10000, note: '5000 x 2人 (周遊券)', paid: true },
-  { id: 'fc9', title: '新幹線 (東京-輕井澤)', amount: 22480, note: 'E48341 (2人)', paid: true },
+  { id: 'fc9', title: '新幹線 (GranClass)', amount: 22480, note: 'Asama 635 (11240 x 2)', paid: true },
 ];
 
 // --- 3. 元件 ---
@@ -338,12 +338,12 @@ const ItineraryView = () => {
   );
 };
 
-// --- 資訊頁面 (新增機場接送區塊) ---
+// --- 資訊頁面 ---
 const InfoView = () => (
   <div className="pb-24 pt-6 px-4 max-w-md mx-auto space-y-6">
     <h2 className="text-2xl font-bold text-stone-800 px-1">旅程資訊</h2>
     
-    {/* 🚗 機場接送 (新增) */}
+    {/* 🚗 機場接送 */}
     <div className="bg-white rounded-xl shadow-sm border border-stone-100 overflow-hidden">
       <div className="bg-blue-900 px-4 py-3 flex items-center text-white">
         <Bus className="w-5 h-5 mr-2" />
@@ -354,8 +354,6 @@ const InfoView = () => (
            <span>乘客：張世豪</span>
            <a href="https://s.car-plus.com.tw/s/hQNV" target="_blank" rel="noreferrer" className="text-blue-600 underline">訂單查詢</a>
         </div>
-
-        {/* 去程接送 */}
         <div className="border border-stone-200 rounded-lg p-3 relative bg-blue-50/50">
           <div className="flex justify-between items-center mb-2">
             <span className="bg-blue-100 text-blue-700 text-xs font-bold px-2 py-0.5 rounded">去程</span>
@@ -367,8 +365,6 @@ const InfoView = () => (
             ⚠️ 駕駛資訊：用車「前一天」18:00~20:00 提供
           </div>
         </div>
-
-        {/* 回程接送 */}
         <div className="border border-stone-200 rounded-lg p-3 relative bg-orange-50/50">
           <div className="flex justify-between items-center mb-2">
             <span className="bg-orange-100 text-orange-700 text-xs font-bold px-2 py-0.5 rounded">回程</span>
@@ -380,14 +376,13 @@ const InfoView = () => (
             ⚠️ 駕駛資訊：接送時間「前 6 小時」提供
           </div>
         </div>
-
         <div className="text-center text-xs text-stone-400">
           LINE 官方帳號：<span className="font-bold text-green-600">@airgo</span>
         </div>
       </div>
     </div>
 
-    {/* 🚆 車票夾 */}
+    {/* 🚆 車票夾 (更新新幹線詳情) */}
     <div className="bg-white rounded-xl shadow-sm border border-stone-100 overflow-hidden">
       <div className="bg-green-700 px-4 py-3 flex items-center text-white">
         <Train className="w-5 h-5 mr-2" />
@@ -422,16 +417,23 @@ const InfoView = () => (
           </div>
         </div>
 
-        {/* 車票 3: 新幹線 */}
-        <div className="border border-stone-200 rounded-lg p-3 border-l-4 border-l-green-600">
-          <div className="text-xs font-bold text-green-600 mb-1">新幹線 (東京-輕井澤)</div>
-          <div className="font-bold text-stone-800 mb-1">預約號碼：E48341</div>
+        {/* 車票 3: 新幹線 (更新: GranClass) */}
+        <div className="border border-stone-200 rounded-lg p-3 border-l-4 border-l-yellow-600">
+          <div className="flex justify-between">
+             <div className="text-xs font-bold text-yellow-600 mb-1">新幹線 (GranClass)</div>
+             <div className="text-xs font-bold text-yellow-600 mb-1">IC卡進站</div>
+          </div>
+          <div className="font-bold text-stone-800 mb-1">Asama 635 (淺間號)</div>
           <div className="flex justify-between items-center text-sm mb-2">
             <span className="font-mono">10:07 東京</span>
             <span className="text-stone-400">➔</span>
             <span className="font-mono">11:11 輕井澤</span>
           </div>
-          <div className="text-xs text-right text-stone-500">金額：¥22,480 (2人)</div>
+          <div className="bg-stone-50 p-2 rounded text-xs flex justify-between mb-1">
+            <span>12號車廂 (超高檔)</span>
+            <span className="font-bold text-lg text-stone-800">6B, 6C</span>
+          </div>
+          <div className="text-xs text-right text-stone-500">金額：¥22,480 (¥11,240x2)</div>
         </div>
 
         {/* 待辦事項 */}
@@ -641,92 +643,48 @@ const InfoView = () => (
   </div>
 );
 
-// --- 全新清單頁面 (Checklist) ---
+// --- 清單頁面 ---
 const ChecklistView = () => {
   const [items, setItems] = useState([]);
   const [newItemText, setNewItemText] = useState('');
   const [activeType, setActiveType] = useState('prep'); // 'prep' or 'buy'
 
-  // Load
   useEffect(() => {
     const saved = localStorage.getItem('trip_checklist');
-    if (saved) {
-      setItems(JSON.parse(saved));
-    } else {
-      setItems(defaultPrepItems);
-    }
+    if (saved) { setItems(JSON.parse(saved)); } else { setItems(defaultPrepItems); }
   }, []);
 
-  // Save
-  useEffect(() => {
-    localStorage.setItem('trip_checklist', JSON.stringify(items));
-  }, [items]);
+  useEffect(() => { localStorage.setItem('trip_checklist', JSON.stringify(items)); }, [items]);
 
-  const toggleCheck = (id) => {
-    setItems(items.map(item => item.id === id ? { ...item, checked: !item.checked } : item));
-  };
-
+  const toggleCheck = (id) => { setItems(items.map(item => item.id === id ? { ...item, checked: !item.checked } : item)); };
   const addItem = (e) => {
-    e.preventDefault();
-    if (!newItemText.trim()) return;
+    e.preventDefault(); if (!newItemText.trim()) return;
     setItems([...items, { id: Date.now().toString(), text: newItemText, checked: false, type: activeType }]);
     setNewItemText('');
   };
-
-  const deleteItem = (id) => {
-    setItems(items.filter(item => item.id !== id));
-  };
-
+  const deleteItem = (id) => { setItems(items.filter(item => item.id !== id)); };
   const displayItems = items.filter(i => i.type === activeType);
 
   return (
     <div className="pb-24 pt-6 px-4 max-w-md mx-auto">
       <h2 className="text-2xl font-bold text-stone-800 mb-6 px-1">準備與購物</h2>
-
-      {/* Tabs */}
       <div className="flex bg-stone-200 p-1 rounded-xl mb-6">
-        <button 
-          onClick={() => setActiveType('prep')}
-          className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${activeType === 'prep' ? 'bg-white text-stone-800 shadow-sm' : 'text-stone-500'}`}
-        >
-          行前準備
-        </button>
-        <button 
-          onClick={() => setActiveType('buy')}
-          className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${activeType === 'buy' ? 'bg-white text-stone-800 shadow-sm' : 'text-stone-500'}`}
-        >
-          購物清單
-        </button>
+        <button onClick={() => setActiveType('prep')} className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${activeType === 'prep' ? 'bg-white text-stone-800 shadow-sm' : 'text-stone-500'}`}>行前準備</button>
+        <button onClick={() => setActiveType('buy')} className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${activeType === 'buy' ? 'bg-white text-stone-800 shadow-sm' : 'text-stone-500'}`}>購物清單</button>
       </div>
-
-      {/* Input */}
       <form onSubmit={addItem} className="flex gap-2 mb-6">
-        <input 
-          type="text" 
-          value={newItemText}
-          onChange={(e) => setNewItemText(e.target.value)}
-          placeholder={activeType === 'prep' ? "新增準備項目..." : "新增想買的東西..."}
-          className="flex-1 bg-white border border-stone-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-stone-400 shadow-sm"
-        />
-        <button type="submit" className="bg-stone-800 text-white w-12 rounded-xl flex items-center justify-center shadow-sm active:scale-95 transition-transform">
-          <Plus size={20} />
-        </button>
+        <input type="text" value={newItemText} onChange={(e) => setNewItemText(e.target.value)} placeholder={activeType === 'prep' ? "新增準備項目..." : "新增想買的東西..."} className="flex-1 bg-white border border-stone-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-stone-400 shadow-sm"/>
+        <button type="submit" className="bg-stone-800 text-white w-12 rounded-xl flex items-center justify-center shadow-sm active:scale-95 transition-transform"><Plus size={20} /></button>
       </form>
-
-      {/* List */}
       <div className="space-y-3">
         {displayItems.length === 0 && <div className="text-center text-stone-400 py-8 text-sm">清單是空的</div>}
         {displayItems.map(item => (
           <div key={item.id} className={`flex items-center justify-between p-4 rounded-xl border transition-all ${item.checked ? 'bg-stone-50 border-stone-100 opacity-60' : 'bg-white border-stone-100 shadow-sm'}`}>
             <div className="flex items-center flex-1 cursor-pointer" onClick={() => toggleCheck(item.id)}>
-              <div className={`w-5 h-5 rounded border mr-3 flex items-center justify-center transition-colors ${item.checked ? 'bg-indigo-500 border-indigo-500' : 'border-stone-300'}`}>
-                {item.checked && <CheckSquare size={14} className="text-white" />}
-              </div>
+              <div className={`w-5 h-5 rounded border mr-3 flex items-center justify-center transition-colors ${item.checked ? 'bg-indigo-500 border-indigo-500' : 'border-stone-300'}`}>{item.checked && <CheckSquare size={14} className="text-white" />}</div>
               <span className={`text-sm font-medium ${item.checked ? 'text-stone-400 line-through' : 'text-stone-700'}`}>{item.text}</span>
             </div>
-            <button onClick={() => deleteItem(item.id)} className="text-stone-300 hover:text-red-400 p-2">
-              <X size={16} />
-            </button>
+            <button onClick={() => deleteItem(item.id)} className="text-stone-300 hover:text-red-400 p-2"><X size={16} /></button>
           </div>
         ))}
       </div>
