@@ -6,7 +6,7 @@ import {
   DollarSign, PieChart, Bus, Mountain
 } from 'lucide-react';
 
-// --- 1. 行程資料 (已更新 Day 7 回程交通) ---
+// --- 1. 行程資料 (已更新 Day 7 N'EX 時間) ---
 const itineraryData = [
   {
     day: 1,
@@ -206,7 +206,7 @@ const itineraryData = [
         tips: ["記得出示加油收據。"]
       },
       {
-        id: "7-2", time: "10:46", type: "transport", title: "新幹線 Hakutaka 558 (Green Car)",
+        id: "7-2", time: "10:46", type: "transport", title: "Hakutaka 558 (Green Car)",
         desc: "長野 (10:46) ➔ 東京 (12:20)。",
         highlight: "座位：11車 2C, 2D",
         tips: ["使用 IC 卡進站。", "抵達後先將行李寄放在東京站置物櫃。"]
@@ -222,9 +222,9 @@ const itineraryData = [
         desc: "享受東京的繁華午後。",
       },
       {
-        id: "7-5", time: "20:03", type: "transport", title: "N'EX 成田特快 53號",
+        id: "7-5", time: "18:33", type: "transport", title: "Narita Express (YOKOHAMA) 53",
         location: "Tokyo Station",
-        desc: "東京站 (20:03) ➔ 成田 T1 (21:13)。",
+        desc: "東京站 (18:33) ➔ 成田 T1 (19:37)。",
         highlight: "座位：8車 14C, 14D",
         tips: ["請預留時間回東京站取行李。", "使用「N'EX去回車票」進站。"]
       }
@@ -275,7 +275,7 @@ const defaultFixedCosts = [
   { id: 'fc7', title: '住宿 (Toyoko Inn)', amount: 0, note: '成田 1晚', paid: false },
   { id: 'fc8', title: 'N\'EX 東京去回車票', amount: 10000, note: '5000 x 2人 (周遊券)', paid: true },
   { id: 'fc9', title: '新幹線 (GranClass)', amount: 22480, note: 'Asama 635 (11240 x 2)', paid: true },
-  { id: 'fc10', title: '新幹線 (回程 Green)', amount: 23600, note: 'Hakutaka 558 (11800 x 2)', paid: true },
+  { id: 'fc10', title: '新幹線 (Hakutaka 558)', amount: 23600, note: '回程 Green (11800 x 2)', paid: true },
 ];
 
 // --- 3. 元件 ---
@@ -468,14 +468,14 @@ const InfoView = () => (
           <div className="text-xs text-right text-stone-500">金額：¥23,600 (¥11,800x2)</div>
         </div>
 
-        {/* 車票 5: 回程 N'EX (新增) */}
+        {/* 車票 5: 回程 N'EX (更新) */}
         <div className="border border-stone-200 rounded-lg p-3 border-l-4 border-l-red-500">
           <div className="text-xs font-bold text-red-600 mb-1">指定席 (回程)</div>
-          <div className="font-bold text-stone-800 mb-1">Narita-Express 53</div>
+          <div className="font-bold text-stone-800 mb-1">Narita-Express (YOKOHAMA) 53</div>
           <div className="flex justify-between items-center text-sm mb-2">
-            <span className="font-mono">20:03 東京</span>
+            <span className="font-mono">18:33 東京</span>
             <span className="text-stone-400">➔</span>
-            <span className="font-mono">21:13 成田 T1</span>
+            <span className="font-mono">19:37 成田 T1</span>
           </div>
           <div className="bg-stone-50 p-2 rounded text-xs flex justify-between">
             <span>8號車廂</span>
