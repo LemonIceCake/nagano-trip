@@ -3,142 +3,151 @@ import {
   MapPin, Calendar, Utensils, ShoppingBag, Car, Navigation, 
   CloudSnow, CloudSun, Hotel, Phone, Trash2, AlertTriangle, Info, CreditCard, Wallet,
   ExternalLink, Search, CheckSquare, ShieldCheck, FileWarning, Plus, X, Plane, Ticket, Luggage, Train,
-  DollarSign, PieChart, Bus
+  DollarSign, PieChart, Bus, Mountain
 } from 'lucide-react';
 
-// --- 1. 行程資料 ---
+// --- 1. 行程資料 (已完全更新 D1-D4) ---
 const itineraryData = [
   {
     day: 1,
-    date: "1/16 (五) ~ 1/17 (六)",
-    title: "出發與移動",
-    location: "台灣 ➔ 東京 ➔ 輕井澤",
+    date: "1/17 (六)",
+    title: "抵達與美食",
+    location: "東京 ➔ 輕井澤 ➔ 長野",
     weather: { temp: "-2°C", condition: "cloudy" },
     activities: [
       {
-        id: "1-0", time: "22:40", type: "transport", title: "格上機場接送 (去程)",
-        desc: "2026/01/16 (週五) 晚上出發前往桃園機場。",
-        tips: ["駕駛資訊將於前一天 18:00~20:00 通知。", "記得帶護照！"]
+        id: "1-0", time: "前日", type: "transport", title: "格上機場接送 (1/16出發)",
+        desc: "★ 1/16 (五) 22:40 出發前往桃園機場。",
+        tips: ["駕駛資訊於前一天 18:00~20:00 通知。"]
       },
       {
         id: "1-1", time: "06:30", type: "transport", title: "抵達東京成田 (NRT)",
-        desc: "樂桃 MM620 抵達 T1 第一航廈。辦理入境、領取行李。",
-        tips: ["入境後記得先去上廁所、買水。", "前往 B1 JR 車站改札口。"]
+        desc: "樂桃 MM620 抵達 T1。入境後轉乘 N'EX (08:12)。",
       },
       {
-        id: "1-2", time: "08:12", type: "transport", title: "N'EX 成田特快 4號",
-        desc: "成田 T1 發 (08:12) ➔ 東京站 著 (09:20)。",
-        highlight: "座位：7車 10A, 10B",
-        tips: ["使用「N'EX去回車票」進站。", "到東京站後，轉乘「北陸新幹線」。"]
+        id: "1-2", time: "10:07", type: "transport", title: "新幹線前往輕井澤",
+        desc: "搭乘 Asama 635 (10:07 東京發)，11:11 抵達輕井澤。",
+        tips: ["使用 IC 卡進站 (GranClass)。"]
       },
       {
-        id: "1-3", time: "10:07", type: "transport", title: "新幹線 Asama 635 (GranClass)",
-        desc: "東京站 發 (10:07) ➔ 輕井澤 著 (11:11)。",
-        tips: ["⚠️ 使用 IC 卡進站 (請確認已綁定)", "座位：12車 6B, 6C (超高檔車廂)。"]
-      },
-      {
-        id: "1-4", time: "11:30", type: "shopping", title: "輕井澤 Prince Shopping Plaza",
+        id: "1-3", time: "11:30", type: "shopping", title: "輕井澤 Outlet",
         location: "Karuizawa Prince Shopping Plaza",
-        desc: "抵達輕井澤！先寄放行李（車站 Coin Locker 或王子飯店接駁車）。",
-        highlight: "必買：The North Face, Columbia 雪靴",
-        tips: ["Outlet 很大，建議先看地圖鎖定戶外用品區。", "午餐可在 Outlet 美食街解決。"]
+        desc: "採購雪靴與戶外裝備。",
+        highlight: "必買：The North Face, Columbia",
       },
       {
-        id: "1-5", time: "16:00", type: "transport", title: "前往長野市", location: "JR Nagano Station",
-        desc: "搭乘新幹線前往長野站 (約 30 分鐘)。(尚未預訂)",
+        id: "1-4", time: "16:30", type: "transport", title: "前往長野市",
+        desc: "搭乘新幹線前往長野站 (約 30 分鐘)。",
       },
       {
-        id: "1-6", time: "18:00", type: "food", title: "長野站前晚餐", location: "Nagano Station Midori",
-        desc: "車站樓上 Midori 美食街或站前居酒屋。",
-        highlight: "推薦：明治亭 醬汁豬排丼",
+        id: "1-5", time: "18:30", type: "food", title: "晚餐：あじ源 (Ajigen)",
+        location: "Ajigen Nagano Station",
+        desc: "長野站前的人氣居酒屋，品嚐信州在地料理。",
+        highlight: "必點：味噌料理、生魚片",
+        tips: ["就在長野站善光寺口附近，步行即達。"]
       }
     ]
   },
   {
     day: 2,
     date: "1/18 (日)",
-    title: "神話與白雪",
+    title: "戶隱神話與白馬絕景",
     location: "長野 ➔ 戶隱 ➔ 白馬",
     weather: { temp: "-5°C", condition: "snow" },
     alert: "今日取車！請檢查 4WD 與雪胎。",
     activities: [
       {
         id: "2-1", time: "10:00", type: "transport", title: "租車取車", location: "Nippon Rent-a-car Nagano Station East Exit",
-        desc: "前往長野站東口店取車。務必確認 4WD。",
-        highlight: "檢查：加油蓋位置、除雪刷",
+        desc: "長野站東口取車 (S-S Class 4WD)。",
       },
       {
-        id: "2-2", time: "11:30", type: "sightseeing", title: "戶隱神社 (中社)", location: "Togakushi Shrine Chusha",
-        desc: "參拜著名的能量景點。冬季奧社封路，參拜中社即可。",
-        tips: ["參道雪很厚，小心地滑。", "巨大的三本杉必拍。"]
+        id: "2-2", time: "11:00", type: "sightseeing", title: "戶隱神社 (中社)", location: "Togakushi Shrine Chusha",
+        desc: "參拜著名的能量景點，感受巨大杉木林的靈氣。",
+        tips: ["雪地溼滑，請穿著剛買的防滑雪靴。"]
       },
       {
-        id: "2-3", time: "13:00", type: "food", title: "戶隱蕎麥麵", location: "Uzuraya Togakushi",
-        desc: "日本三大蕎麥麵之一。",
-        highlight: "必吃：うずら家 (Uzura-ya)",
-        tips: ["排隊名店，建議一到就先去寫候位單。"]
+        id: "2-3", time: "12:30", type: "food", title: "午餐：Soba no Mi (蕎麦の実)",
+        location: "Soba no Mi Togakushi",
+        desc: "戶隱最知名的蕎麥麵店之一，在此享用午餐。",
+        highlight: "推薦：戶隱蕎麥麵",
+        tips: ["名店常需排隊，建議提早抵達或登記候位。"]
       },
       {
-        id: "2-4", time: "15:30", type: "sightseeing", title: "白馬村 Snow Peak", location: "Snow Peak Land Station Hakuba",
+        id: "2-4", time: "14:30", type: "sightseeing", title: "白馬 Snow Peak 咖啡",
+        location: "Snow Peak Land Station Hakuba",
         desc: "由隈研吾設計的複合設施，喝咖啡欣賞北阿爾卑斯山雪景。",
-        highlight: "必點：雪峰拿鐵",
+        highlight: "必拍：絕美建築與雪山背景",
       },
       {
-        id: "2-5", time: "18:00", type: "relaxation", title: "白馬溫泉", location: "Hakuba Happo Onsen",
-        desc: "著名的強鹼性溫泉，號稱美人之湯。",
-        highlight: "推薦：八方之湯",
+        id: "2-5", time: "15:30", type: "sightseeing", title: "白馬岩岳 Mountain Resort",
+        location: "Hakuba Iwatake Mountain Resort",
+        desc: "搭乘纜車至山頂 (Noah 山麓站)，前往 City Bakery 觀景台。",
+        tips: ["纜車營運時間要注意，通常 16:00 左右最後下山。"]
+      },
+      {
+        id: "2-6", time: "18:30", type: "food", title: "晚餐：回長野市區吃",
+        desc: "開車返回長野市 (約 1 小時車程)，市區自由覓食。",
       }
     ]
   },
   {
     day: 3,
     date: "1/19 (一)",
-    title: "國寶與冰湖",
+    title: "國寶城與鰻魚飯",
     location: "長野 ➔ 松本 ➔ 諏訪",
     weather: { temp: "0°C", condition: "cloudy" },
     activities: [
       {
         id: "3-1", time: "10:00", type: "sightseeing", title: "松本城", location: "Matsumoto Castle",
-        desc: "日本現存最古老的五重六階天守，雪中黑城非常美。",
-        tips: ["天守閣樓梯非常陡，穿裙子不方便。"]
+        desc: "日本現存最古老的五重六階天守，雪中黑城非常壯觀。",
+        tips: ["天守閣樓梯陡峭，請小心步伐。"]
       },
       {
-        id: "3-2", time: "12:00", type: "food", title: "午餐：山賊燒", location: "Nakamachi Street Matsumoto",
-        desc: "中町通散步與午餐。",
-        highlight: "必吃：松本名物 山賊燒",
+        id: "3-2", time: "12:30", type: "food", title: "午餐：Unagi Suimon (鰻魚 水門)",
+        location: "Unagi Suimon Okaya",
+        desc: "位於諏訪湖/岡谷地區的鰻魚飯名店。",
+        highlight: "必吃：特上鰻魚重",
+        tips: ["岡谷是鰻魚之鄉，這家醬汁濃郁非常有名。"]
       },
       {
-        id: "3-3", time: "14:30", type: "sightseeing", title: "諏訪湖 & 諏訪大社", location: "Suwa Taisha Kamisha Honmiya",
-        desc: "參拜諏訪大社，接著去立石公園看《你的名字》湖景。",
-        highlight: "拍照點：立石公園",
+        id: "3-3", time: "14:30", type: "sightseeing", title: "諏訪湖散策", location: "Lake Suwa",
+        desc: "欣賞諏訪湖景色 (若有結冰會很美)，可前往立石公園眺望全景。",
       },
       {
-        id: "3-4", time: "16:00", type: "transport", title: "移動回長野",
-        desc: "若白樺湖路段積雪過深，建議改走高速公路回長野。",
-        alert: "天黑前務必下山，高原路段易結冰"
+        id: "3-4", time: "18:00", type: "food", title: "晚餐：回長野市區吃",
+        desc: "返回長野市住宿點附近用餐。",
       }
     ]
   },
   {
     day: 4,
     date: "1/20 (二)",
-    title: "日本海鮮之都",
-    location: "長野 ➔ 新潟",
+    title: "光之隧道與清酒",
+    location: "長野 ➔ 新潟 (十日町/越後湯澤)",
     weather: { temp: "2°C", condition: "cloudy" },
     activities: [
       {
-        id: "4-1", time: "10:00", type: "transport", title: "前往新潟", location: "Niigata Station",
-        desc: "約 2-2.5 小時車程，沿途欣賞雪國風景。",
+        id: "4-1", time: "10:00", type: "transport", title: "前往新潟",
+        desc: "辦理退房，開車前往新潟 (往十日町方向)。",
       },
       {
-        id: "4-2", time: "13:00", type: "food", title: "Pier Bandai 海鮮市場", location: "Pier Bandai",
-        desc: "新潟的廚房，海鮮選擇極多。",
-        highlight: "必吃：迴轉壽司 弁慶",
-        tips: ["弁慶非常熱門，建議避開尖峰或先抽號碼。"]
+        id: "4-2", time: "11:30", type: "sightseeing", title: "清津峽溪谷隧道",
+        location: "Kiyotsu Gorge Tunnel",
+        desc: "日本三大峽谷之一，著名的網美打卡點「光之隧道」(Tunnel of Light)。",
+        highlight: "必拍：鏡池倒影",
+        tips: ["需事先確認是否需要預約 (冬季人較少通常不用)。"]
       },
       {
-        id: "4-3", time: "15:30", type: "sightseeing", title: "Befco Bakauke 展望台", location: "Befco Bakauke Observation Deck",
-        desc: "朱鷺展覽館 31F，免費入場，俯瞰信濃川與日本海。",
+        id: "4-3", time: "15:00", type: "transport", title: "飯店 Check-in",
+        location: "Hotel Nikko Niigata",
+        desc: "前往新潟市區飯店辦理入住 (日航新潟)。",
+      },
+      {
+        id: "4-4", time: "17:00", type: "sightseeing", title: "Ponshukan 清酒博物館",
+        location: "Ponshukan Niigata Station",
+        desc: "位於新潟站內的「ぽんしゅ館」，500日圓試飲 5 種清酒。",
+        highlight: "體驗：清酒販賣機、爆彈飯糰",
+        tips: ["就在車站內，離飯店不遠。"]
       }
     ]
   },
@@ -150,17 +159,11 @@ const itineraryData = [
     weather: { temp: "1°C", condition: "snow" },
     activities: [
       {
-        id: "5-1", time: "10:00", type: "food", title: "Ponshukan (ぽんしゅ館)", location: "Ponshukan Niigata Station",
-        desc: "位於新潟站內，500日圓試飲5種清酒。",
-        highlight: "必試：爆彈飯糰",
-        tips: ["未開車者可試飲，駕駛請喝甘酒。"]
-      },
-      {
-        id: "5-2", time: "11:30", type: "sightseeing", title: "沼垂 Terrace 商店街", location: "Nuttari Terrace Street",
+        id: "5-1", time: "10:00", type: "sightseeing", title: "沼垂 Terrace 商店街", location: "Nuttari Terrace Street",
         desc: "舊工廠改建的文青街區，充滿咖啡廳與雜貨店。",
       },
       {
-        id: "5-3", time: "14:00", type: "transport", title: "返回長野",
+        id: "5-2", time: "14:00", type: "transport", title: "返回長野",
         desc: "自駕返回長野市。",
       }
     ]
@@ -416,7 +419,7 @@ const InfoView = () => (
           </div>
         </div>
 
-        {/* 車票 3: 新幹線 (更新: GranClass) */}
+        {/* 車票 3: 新幹線 (GranClass) */}
         <div className="border border-stone-200 rounded-lg p-3 border-l-4 border-l-yellow-600">
           <div className="flex justify-between">
              <div className="text-xs font-bold text-yellow-600 mb-1">新幹線 (GranClass)</div>
@@ -426,7 +429,7 @@ const InfoView = () => (
           <div className="flex justify-between items-center text-sm mb-2">
             <span className="font-mono">10:07 東京</span>
             <span className="text-stone-400">➔</span>
-            <span className="font-mono">11:11 輕井澤</span>
+            <span className="font-mono">11:11 輕井澤/長野</span>
           </div>
           <div className="bg-stone-50 p-2 rounded text-xs flex justify-between mb-1">
             <span>12號車廂 (超高檔)</span>
