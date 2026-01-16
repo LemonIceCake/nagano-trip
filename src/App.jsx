@@ -6,7 +6,7 @@ import {
   DollarSign, PieChart, Bus, Mountain
 } from 'lucide-react';
 
-// --- 1. 行程資料 (已完全更新 D1-D4) ---
+// --- 1. 行程資料 (已更新 Day 7 回程交通) ---
 const itineraryData = [
   {
     day: 1,
@@ -202,21 +202,31 @@ const itineraryData = [
     activities: [
       {
         id: "7-1", time: "10:00", type: "transport", title: "長野站還車",
-        desc: "加滿油後還車，搭乘新幹線前往東京。",
+        desc: "加滿油後還車，前往新幹線月台。",
+        tips: ["記得出示加油收據。"]
       },
       {
-        id: "7-2", time: "13:30", type: "food", title: "根室花まる (壽司)", location: "Nemuro Hanamaru Ginza",
+        id: "7-2", time: "10:46", type: "transport", title: "新幹線 Hakutaka 558 (Green Car)",
+        desc: "長野 (10:46) ➔ 東京 (12:20)。",
+        highlight: "座位：11車 2C, 2D",
+        tips: ["使用 IC 卡進站。", "抵達後先將行李寄放在東京站置物櫃。"]
+      },
+      {
+        id: "7-3", time: "13:00", type: "food", title: "根室花まる (壽司)", location: "Nemuro Hanamaru Ginza",
         desc: "來自北海道的超人氣迴轉壽司。",
         highlight: "推薦：二層干貝、炙燒比目魚緣側",
-        tips: ["推薦去銀座店 (Tokyu Plaza 10F)，比東京站丸之內店好排。"]
+        tips: ["推薦去銀座店 (Tokyu Plaza 10F) 或東京站店。"]
       },
       {
-        id: "7-3", time: "15:00", type: "shopping", title: "銀座散策", location: "Ginza Six",
+        id: "7-4", time: "15:00", type: "shopping", title: "銀座散策", location: "Ginza Six",
         desc: "享受東京的繁華午後。",
       },
       {
-        id: "7-4", time: "19:00", type: "transport", title: "前往成田", location: "Narita Airport",
-        desc: "晚上移動至成田機場周邊住宿，準備明日搭機 (長野回東京、N'EX回程座位尚未預約)。",
+        id: "7-5", time: "20:03", type: "transport", title: "N'EX 成田特快 53號",
+        location: "Tokyo Station",
+        desc: "東京站 (20:03) ➔ 成田 T1 (21:13)。",
+        highlight: "座位：8車 14C, 14D",
+        tips: ["請預留時間回東京站取行李。", "使用「N'EX去回車票」進站。"]
       }
     ]
   },
@@ -265,6 +275,7 @@ const defaultFixedCosts = [
   { id: 'fc7', title: '住宿 (Toyoko Inn)', amount: 0, note: '成田 1晚', paid: false },
   { id: 'fc8', title: 'N\'EX 東京去回車票', amount: 10000, note: '5000 x 2人 (周遊券)', paid: true },
   { id: 'fc9', title: '新幹線 (GranClass)', amount: 22480, note: 'Asama 635 (11240 x 2)', paid: true },
+  { id: 'fc10', title: '新幹線 (回程 Green)', amount: 23600, note: 'Hakutaka 558 (11800 x 2)', paid: true },
 ];
 
 // --- 3. 元件 ---
@@ -429,7 +440,7 @@ const InfoView = () => (
           <div className="flex justify-between items-center text-sm mb-2">
             <span className="font-mono">10:07 東京</span>
             <span className="text-stone-400">➔</span>
-            <span className="font-mono">11:11 輕井澤/長野</span>
+            <span className="font-mono">11:11 輕井澤</span>
           </div>
           <div className="bg-stone-50 p-2 rounded text-xs flex justify-between mb-1">
             <span>12號車廂 (超高檔)</span>
@@ -438,13 +449,38 @@ const InfoView = () => (
           <div className="text-xs text-right text-stone-500">金額：¥22,480 (¥11,240x2)</div>
         </div>
 
-        {/* 待辦事項 */}
-        <div className="bg-yellow-50 p-3 rounded-lg border border-yellow-100 text-xs text-yellow-800">
-          <strong>⚠️ 尚未預約：</strong>
-          <ul className="list-disc list-inside mt-1 space-y-1">
-            <li>N'EX 回程指定席 (憑去回券劃位)</li>
-            <li>長野 ➔ 東京 回程車票</li>
-          </ul>
+        {/* 車票 4: 回程新幹線 (新增) */}
+        <div className="border border-stone-200 rounded-lg p-3 border-l-4 border-l-green-600">
+          <div className="flex justify-between">
+             <div className="text-xs font-bold text-green-600 mb-1">新幹線 (Green Car)</div>
+             <div className="text-xs font-bold text-green-600 mb-1">IC卡進站</div>
+          </div>
+          <div className="font-bold text-stone-800 mb-1">Hakutaka 558</div>
+          <div className="flex justify-between items-center text-sm mb-2">
+            <span className="font-mono">10:46 長野</span>
+            <span className="text-stone-400">➔</span>
+            <span className="font-mono">12:20 東京</span>
+          </div>
+          <div className="bg-stone-50 p-2 rounded text-xs flex justify-between mb-1">
+            <span>11號車廂 (Green)</span>
+            <span className="font-bold text-lg text-stone-800">2C, 2D</span>
+          </div>
+          <div className="text-xs text-right text-stone-500">金額：¥23,600 (¥11,800x2)</div>
+        </div>
+
+        {/* 車票 5: 回程 N'EX (新增) */}
+        <div className="border border-stone-200 rounded-lg p-3 border-l-4 border-l-red-500">
+          <div className="text-xs font-bold text-red-600 mb-1">指定席 (回程)</div>
+          <div className="font-bold text-stone-800 mb-1">Narita-Express 53</div>
+          <div className="flex justify-between items-center text-sm mb-2">
+            <span className="font-mono">20:03 東京</span>
+            <span className="text-stone-400">➔</span>
+            <span className="font-mono">21:13 成田 T1</span>
+          </div>
+          <div className="bg-stone-50 p-2 rounded text-xs flex justify-between">
+            <span>8號車廂</span>
+            <span className="font-bold text-lg text-stone-800">14C, 14D</span>
+          </div>
         </div>
       </div>
     </div>
