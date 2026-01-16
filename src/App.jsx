@@ -6,7 +6,7 @@ import {
   DollarSign, PieChart, Bus
 } from 'lucide-react';
 
-// --- 1. 行程資料 (更新 Day 1 列車資訊) ---
+// --- 1. 行程資料 ---
 const itineraryData = [
   {
     day: 1,
@@ -252,7 +252,6 @@ const defaultPrepItems = [
   { id: 'b2', text: 'Columbia 防水外套', checked: false, type: 'buy' },
 ];
 
-// 更新固定支出 (加入實際車票金額)
 const defaultFixedCosts = [
   { id: 'fc1', title: '租車 (Nippon Rent-A-Car)', amount: 39160, note: 'S-S Class + CDW/ECO', paid: true },
   { id: 'fc2', title: '去程機票 (Peach)', amount: 0, note: '請輸入金額', paid: true },
@@ -382,7 +381,7 @@ const InfoView = () => (
       </div>
     </div>
 
-    {/* 🚆 車票夾 (更新新幹線詳情) */}
+    {/* 🚆 車票夾 */}
     <div className="bg-white rounded-xl shadow-sm border border-stone-100 overflow-hidden">
       <div className="bg-green-700 px-4 py-3 flex items-center text-white">
         <Train className="w-5 h-5 mr-2" />
